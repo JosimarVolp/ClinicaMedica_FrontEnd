@@ -1,0 +1,40 @@
+.formulario {
+
+    width: 40%;
+    margin: 0 auto;
+    padding: 20px;
+}
+
+.formulario label {
+
+ font-weight: bold;
+}
+
+.formulario input {
+
+    width: 100%;
+    margin: 5px auto 20px auto;
+}
+
+.formulario select {
+
+    width: 100%;
+    margin: 5px auto 20px auto;
+}
+
+.formulario textarea {
+
+    width: 100%;
+    margin: 5px auto 20px auto;
+}
+
+.botaoCadastrar {
+
+    width: 100px;
+    margin: 30px auto 0 auto;       
+}
+
+.botaoCadastrar a:link {
+
+    color: white;
+}

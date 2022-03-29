@@ -1,0 +1,13 @@
+.containerSuperior {
+
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+    justify-content: flex-end;
+    margin: 0 10%;
+}
+
+body {
+
+    background-color: #eee;
+}

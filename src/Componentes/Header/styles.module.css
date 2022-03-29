@@ -1,0 +1,99 @@
+body {
+
+    padding: 0;
+    margin: 0;
+    font-family: 'Times New Roman', Times, serif;
+    font-size: 16px;
+}
+
+nav {
+
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-left: 10%;
+    margin-right: 10%;
+}
+
+.navList {
+
+    list-style: none;
+    display: flex;
+}
+
+.navList li {
+
+    
+    margin-left: 16px;
+    text-decoration: none;
+    color: #fff;
+    font-size: 1.1em;    
+}
+
+.navList .link {
+
+    text-decoration: none;
+    color: #fff;
+}
+
+.mobileMenu {
+
+    display: none;
+    cursor: pointer;
+}
+
+.mobileMenu div {
+
+    width: 32px;
+    height: 2px;
+    background-color: #fff;
+    margin: 8px;
+}
+
+@media (max-width: 999px) {
+
+    body {
+
+        overflow-x: hidden;
+    }
+
+    .navList {
+
+        position: absolute;
+        top: 100px;
+        right: 0;
+        width: 50vw;
+        height: 92vh;
+        background-color: #EA1111;
+        flex-direction: column;
+        align-items: center;
+        justify-content: space-around;
+        transform: translate(100%);
+
+    }
+
+    .navList li {
+
+        margin-left: 0;
+        opacity: 0;
+    }
+
+    .mobileMenu {
+
+        display: block;
+    }
+}
+
+.faixaCabecalho {
+
+    background-color: #EA1111; /*#835afd*/
+    width: 100%;
+}
+
+
+
+nav img {
+
+    height: 133px;
+   
+}

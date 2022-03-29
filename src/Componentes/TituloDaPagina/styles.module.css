@@ -1,0 +1,15 @@
+.caixaDoTitulo {
+
+    width: 80%;
+    height: 80px;
+    background-color: #EA1111;
+    margin: 30px 10%
+
+}
+
+.caixaDoTitulo h1 {
+
+    text-align: center;
+    color: white;
+    padding-top: 20px;
+}

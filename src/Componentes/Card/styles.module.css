@@ -1,0 +1,43 @@
+.cartao {
+
+    background-color: #eee;
+    border: #EA1111 solid thin;
+    width: 32%;
+    min-width: 300px;
+    margin-bottom: 10px;
+    height: 330px;
+   
+}
+
+.cartao img {
+
+    width: 90%;
+    height: 75%;
+    margin: 5%;
+    border: #EA1111 solid 1px;
+    
+}
+
+.cartao h2 {
+
+    text-align: center;
+    margin-top: 3px;
+    font-size: 16px;
+    
+}
+
+.link {
+
+    text-decoration: none;
+    color: #000;
+}
+
+@media (max-width: 800px) {
+
+    .cartao {
+
+        width: 100%;        
+        
+    }
+    
+}

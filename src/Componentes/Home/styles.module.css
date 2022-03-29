@@ -1,0 +1,70 @@
+.areaPrincipal {
+
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+    width: 80%;
+    margin: 0 auto 0;
+    background-color: #eee;
+}
+
+.areaSuperior {
+
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+    width: 100%;    
+    background-color: #eee;
+
+}
+
+.boxCarrossel {
+
+    width: 49%;
+    min-width: 300px;
+    height: 250px;
+    margin-top: 10px;
+    margin-right: 1%;
+    
+    
+}
+
+.agendamento {
+
+    display: flex;
+    flex-direction: column;
+    width: 49%;
+    min-width: 300px;
+    height: 250px;
+    margin-top: 10px;
+    margin-left: 1%;
+    background-color: #eee;
+    
+}
+
+.areaInferior {
+
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+    justify-content: space-between;
+    width: 100%;
+    margin-top: 30px;
+}
+
+@media (max-width: 800px) {
+
+    .boxCarrossel {
+
+        width: 100%;        
+        
+    }
+
+    .agendamento {
+
+        width: 100%;        
+        
+    }
+    
+}
+

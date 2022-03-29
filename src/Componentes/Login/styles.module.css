@@ -1,0 +1,41 @@
+.login {
+
+    background-color: #eee;
+    width: 40%;
+    height: 150px;
+    border: #EA1111 1px solid;
+    border-radius: 3%;
+    margin: 50px auto;
+    padding: 20px;
+    
+    
+}
+
+.formLogin {
+
+    background-color: #eee;
+    margin: 10px auto;
+}
+
+.formLogin input {
+
+    width: 95%;
+    margin: 0 auto 10px auto;
+    
+}
+
+.formLogin label {
+
+    margin-top: 50px;
+}
+
+.botaoLogin {
+
+    background-color: #EA1111;
+    margin: 10px 35%;
+    /*border-radius: 10%;*/
+    color: #fff;
+    padding: 2px 50px;
+
+    
+}

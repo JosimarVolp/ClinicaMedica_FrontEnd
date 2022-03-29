@@ -1,0 +1,70 @@
+.areaTotalRodape {
+
+    background-color: #EA1111;
+    width: 100%;      
+    
+}
+
+.bloco {
+
+    width: 20%;
+    min-width: 300px;
+    
+    margin: 0;
+    padding: 0;
+}
+
+.areaOcupada {
+    background-color: #EA1111;
+    width: 80%;
+    margin: 20px auto 0;
+      
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap; 
+    justify-content: space-between;
+    
+
+
+}
+
+@media (max-width: 800px) {
+
+    .bloco {
+
+        width: 100%;        
+        
+    }   
+    
+}
+
+
+
+
+.rodape .blocoMapa {   
+  
+    
+    width: 300px;
+    height: 150px;
+    
+    right: 10%;
+    margin: 30px 0;
+    
+}
+
+.rodape .blocoMapa span {
+    
+    color: #fff;    
+    width: 300px;
+    height: 150px;
+    margin-top: 30px;
+    
+}
+
+.rodape .blocoMapa img {   
+    
+    width: 300px;
+    height: 150px;
+    margin: 10px 0;
+    
+}

@@ -1,0 +1,102 @@
+.formulario {
+
+    width: 40%;
+    margin: 0 auto;
+    
+}
+
+.formGroup {
+
+    display: flex;
+    flex-direction: column;
+    margin-bottom: 15px;
+} 
+
+.formGroup:first-child {
+
+    margin-top: 30px;
+} 
+
+.formGroup label {
+
+    margin-bottom: 5px;
+    font-size: 14px;
+    font-weight: bold;
+    color: #000;
+
+} 
+
+.formGroup input {
+
+    border: 1px solid #EA1111;
+    border-radius: 8px;
+    background-color: #fff;
+    height: 36px;
+    padding: 0 10px;
+    
+} 
+
+.formGroup select {
+
+    border: 1px solid #EA1111;
+    border-radius: 8px;
+    background-color: #fff;
+    height: 36px;
+    padding: 0 10px;
+    
+} 
+
+.formGroup textarea {
+
+    border: 1px solid #EA1111;
+    border-radius: 8px;
+    background-color: #fff;
+    
+    padding: 10px;
+    
+} 
+
+.caixaDeBotoes {
+
+    width: 40%;
+    margin: 25px auto;    
+    display: flex;
+    flex-direction: row;
+    justify-content: space-around;
+    flex-wrap: wrap;
+}
+
+.botaoCadastrar {
+
+    width: 28%;    
+    padding: 5px;
+    margin: 0 10px 0 0;
+    background-color: #EA1111;
+    color: #fff;
+
+}
+
+.botaoVoltar {
+
+    width: 28%;    
+    padding: 5px;
+    margin: 0 10px 0 10px;
+    background-color: #EA1111;
+    color: #fff;
+
+}
+
+.botaoCancelar {
+
+    width: 28%;    
+    padding: 5px;
+    margin: 0 0 0 10px;
+    background-color: #EA1111;
+    color: #fff;
+
+}
+
+.botaoCadastrar a:link {
+
+    color: #fff;
+}

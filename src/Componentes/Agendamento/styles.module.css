@@ -1,0 +1,19 @@
+.botaoAgendamento {
+
+    width: 40%;
+    margin: 0 30%;
+    padding: auto;
+    background-color: #EA1111;
+    color: #ffffff;
+    font-weight: bold;
+}
+
+.botaoAgendamento:last-child {
+
+    width: 40%;
+    margin: 300px 30%;
+    padding: auto;
+    background-color: #EA1111;
+    color: #ffffff;
+    font-weight: bold;
+}

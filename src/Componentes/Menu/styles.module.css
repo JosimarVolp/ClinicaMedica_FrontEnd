@@ -1,0 +1,26 @@
+.menu {
+
+    display: inline-block;
+    margin-top: 45px;
+    padding-top: 10px;
+    margin-right: 0.8vw;
+
+   
+
+}
+
+.menu li {
+
+    display: inline-block;
+    margin-left: 10px; 
+    font-size: 20px;   
+    font-weight: bold;
+    color: #fff;
+
+}
+
+.menu .link {
+
+    text-decoration: none;
+    color: #fff;
+}

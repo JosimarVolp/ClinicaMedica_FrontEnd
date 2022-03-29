@@ -1,0 +1,11 @@
+.containerPrincipal {
+
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+    width: 80vw;
+    margin: 20px 10%;  
+   
+    
+
+}
