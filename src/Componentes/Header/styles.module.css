@@ -88,6 +88,7 @@ nav {
 
     background-color: #EA1111; /*#835afd*/
     width: 100%;
+    flex-shrink: 0;
 }
 
 

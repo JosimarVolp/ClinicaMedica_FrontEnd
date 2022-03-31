@@ -249,10 +249,24 @@ function EditarConsulta( props ) {
 
 
 
-    function cancelaAgendamento() {
+    function voltaAoGerenciador() {
 
         navigate('/gerenciar_consultas_agendadas')
     }
+
+    function cancelaAgendamento() {
+
+        axios.delete(`https://clinicamedica-backend.herokuapp.com/api/gerenciar_consultas/${consultaAgendada.id}`)
+            
+            .then( ( response ) => {
+
+                alert("Consulta deletada com sucesso!!!");
+                navigate("/gerenciar_consultas_agendadas")
+            });
+        
+    }
+
+    
 
     return (
 
@@ -344,7 +358,7 @@ function EditarConsulta( props ) {
                 <div className = { styles.caixaDeBotoes }>
 
                     <button type = "submit" className = { styles.botaoCadastrar } > Salvar </button>
-                    <button type = "button"  onClick = { cancelaAgendamento } className = { styles.botaoVoltar } > Voltar </button>
+                    <button type = "button"  onClick = { voltaAoGerenciador } className = { styles.botaoVoltar } > Voltar </button>
                     <button type = "button"  onClick = { cancelaAgendamento } className = { styles.botaoCancelar } > Desmarcar </button>
 
                 </div>

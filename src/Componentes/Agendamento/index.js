@@ -46,9 +46,9 @@ function Agendamento() {
 
             <TituloDaPagina tituloDaPagina = { tituloDaPagina } />
 
-            <button onClick = { onClickConsultas } className = { styles.botaoAgendamento }> Agendar Consulta </button>
+            <button type = "button" onClick = { onClickConsultas } className = { styles.botaoAgendamento }> Agendar Consulta </button>
 
-            <button type = "button" className = { styles.botaoAgendamento } onClick = { onClickExames }  > Agendar Exames </button>
+            <button type = "button" onClick = { onClickExames } className = { styles.botaoAgendamento } > Agendar Exames </button>
 
         </>
     );

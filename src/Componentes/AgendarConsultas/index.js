@@ -81,19 +81,29 @@ function AgendarConsultas() {
     //Este estado guarda os dados dos pacientes para preencher o input "Paciente"
     const [ pacientes, setPacientes ] = useState([]);
 
+    //Este estado guarda os dados dos pacientes para preencher o input "Paciente"
+    const [ paciente, setPaciente ] = useState({});
+
     //Este estado guarda os dados de todas as consultas do médico selecionado no input "Médico"
     const [ consultas, setConsultas ] = useState([]);    
 
     //Este useEffect busca todos os pacientes do DB para preencher o select "Paciente"
     useEffect( () => {
 
-        axios.get('https://clinicamedica-backend.herokuapp.com/api/gerenciar_clientes')
-        
-        .then( (res) => {
+        if(usuarioConectado.perfil === "admin") {
 
-            const pacientes = res.data;
-            setPacientes( pacientes );
-        });
+                       axios.get('https://clinicamedica-backend.herokuapp.com/api/gerenciar_logins')
+            
+            .then( (res) => {
+
+                const pacientes01 = res.data;
+                setPacientes( pacientes01 );
+            });
+
+        } else {
+
+            setPaciente(usuarioConectado);
+        }
 
     }, []);
 
@@ -155,8 +165,8 @@ function AgendarConsultas() {
                 
         .then( ( res ) => {
 
-            let consultas = res.data;
-            setConsultas( consultas );
+            let consultas01 = res.data;
+            setConsultas( consultas01 );
         });
     }
     
@@ -293,7 +303,7 @@ function AgendarConsultas() {
 
     function onBlurPaciente() {     
         
-        var valor = 0;
+        var valorEspecialidade = 0;
 
         
         
@@ -301,44 +311,18 @@ function AgendarConsultas() {
 
             if(especialidade.id == dadosDaConsulta.especialidade) {
 
-                valor = especialidade.valor;   
+                valorEspecialidade = especialidade.valorEspecialidade;   
                 
-                console.log("Valor da Especialidade" +valor)
+                console.log("Valor da Especialidade" +valorEspecialidade)
             }
 
-        } );    
-    
-        pacientes.map( ( paciente ) => {
+        } );  
+        
+        //setDadosDaConsulta( { ...dadosDaConsulta, valor: valorEspecialidade } );
 
-            if(paciente.cpf === dadosDaConsulta.paciente) {
+        
 
-                if(paciente.convenio !== null) {
-
-                    axios.get(`https://clinicamedica-backend.herokuapp.com/api/gerenciar_convenios/${paciente.convenio}`)
-                    
-                    .then( ( res ) => {
-
-                        let desconto = (res.data.desconto)/100;
-
-                        valor = (valor - (valor * desconto));
-                        
-                        setInputValor({...inputValor, valorDaConsulta: valor});      
-                        setDadosDaConsulta( { ...dadosDaConsulta, valor: valor});
-
-                        
-
-                        
-                        
-                    });
-
-                    
-                } else {
-
-                    setInputValor({...inputValor, valorDaConsulta: valor});
-                    setDadosDaConsulta( { ...dadosDaConsulta, valor: valor});
-                }
-            }
-    })
+        
 
     setSelectHora({...selectHora, desabilitado: false});
 
@@ -367,24 +351,40 @@ function AgendarConsultas() {
         }
     }
 
-    function exibeSelectString(valor) {
-
-        if(valor === "") {
-        
-            return <option>Selecione</option>
-        }
-    }
-
+    
     function cancelaAgendamento() {
 
         navigate('/gerenciar_consultas_agendadas')
+    }
+
+    function teste() {
+
+        if(usuarioConectado.perfil === "admin") {
+
+            return pacientes.map( ( item) => (
+                            
+                <option key = { item.cpf } value = { item.cpf } > { item.nome}  </option>
+            
+            ))
+
+
+        } else {
+
+            return <option key = { paciente.cpf } value = { paciente.cpf } > { paciente.nome}  </option>
+        }
+
+        
     }
 
     return (
 
         <>
 
-            <TituloDaPagina tituloDaPagina = { tituloDaPagina } />            
+            <TituloDaPagina tituloDaPagina = { tituloDaPagina } />  
+
+            <h1>{dadosDaConsulta.medico}</h1>{}       
+
+            
 
             <form className = { styles.formulario } onSubmit = { onSubmit }>
 
@@ -427,11 +427,8 @@ function AgendarConsultas() {
                     <select id = "paciente" name = "paciente" onChange = { onChange } onBlur = { onBlurPaciente} disabled = { selectPaciente.desabilitado } >
 
                             {exibeSelectString(dadosDaConsulta.paciente)}
-                            {pacientes.map( (paciente) => (
+                            {teste()}
                             
-                                <option key = { paciente.cpf } value = { paciente.cpf } > { paciente.nome}  </option>
-                            
-                            ))}
 
                     </select>
 

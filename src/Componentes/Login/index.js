@@ -81,9 +81,10 @@ function Login() {
                     <label htmlFor = "senha"> Senha </label>
                     <input type="text" id = "senha" name = "senha" onChange = { onChange } />
 
-                </form>
+                
 
-                <button onClick={ matchLogin } className={ styles.botaoLogin } > Entrar </button>
+                <button type= "button" onClick = { matchLogin } > Entrar </button>
+                </form>
 
             </section>
 

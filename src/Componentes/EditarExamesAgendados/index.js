@@ -219,9 +219,21 @@ function EditarExamesAgendados( props ) {
 
     
 
-    function retornaAoGerenciador() {
+    function voltaAoGerenciador() {
 
         navigate('/gerenciar_exames_e_procedimentos_agendados');
+    }
+
+    function cancelaAgendamento() {
+
+        axios.delete(`https://clinicamedica-backend.herokuapp.com/api/gerenciar_exames_e_procedimentos_agendados/${exameAgendado.id}`)
+            
+            .then( ( response ) => {
+
+                alert("Exame desmarcado com sucesso!!!");
+                navigate('/gerenciar_exames_e_procedimentos_agendados');
+            });
+        
     }
     
     return (
@@ -306,11 +318,11 @@ function EditarExamesAgendados( props ) {
 
                 </div>
 
-                <div className = { styles.caixaDeBotoes } >
+                <div className = { styles.caixaDeBotoes }>
 
                     <button type = "submit" className = { styles.botaoCadastrar } > Salvar </button>
-                    <button type = "button" onClick = { retornaAoGerenciador }  className = { styles.botaoVoltar } > Voltar </button>
-                    <button type = "button"  onClick = { retornaAoGerenciador } className = { styles.botaoCancelar } > Desmarcar </button>
+                    <button type = "button"  onClick = { voltaAoGerenciador } className = { styles.botaoVoltar } > Voltar </button>
+                    <button type = "button"  onClick = { cancelaAgendamento } className = { styles.botaoCancelar } > Desmarcar </button>
 
                 </div>
 

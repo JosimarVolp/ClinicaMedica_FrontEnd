@@ -81,19 +81,29 @@ function AgendarExames() {
     //Este estado guarda os dados dos pacientes para preencher o input "Paciente"
     const [ clientes, setClientes ] = useState([]);
 
+     //Este estado guarda os dados dos pacientes para preencher o input "Paciente"
+     const [ cliente, setCliente ] = useState([]);
+
     //Este estado guarda os dados de todas os exames do funcionario selecionado no input "Funcionário"
     const [ examesFuncionario, setExamesFuncionario ] = useState([]);    
 
     //Este useEffect busca todos os pacientes do DB para preencher o select "Paciente"
     useEffect( () => {
 
-        axios.get('https://clinicamedica-backend.herokuapp.com/api/gerenciar_clientes')
-        
-        .then( (res) => {
+        if(usuarioConectado.perfil === "admin") {
 
-            const clientes = res.data;
-            setClientes( clientes );
-        });
+                       axios.get('https://clinicamedica-backend.herokuapp.com/api/gerenciar_logins')
+            
+            .then( (res) => {
+
+                const cliente01 = res.data;
+                setClientes( cliente01 );
+            });
+
+        } else {
+
+            setCliente(usuarioConectado);
+        }
 
     }, []);
 
@@ -308,37 +318,7 @@ function AgendarExames() {
 
         } );    
     
-        clientes.map( ( cliente ) => {
-
-            if(cliente.cpf === dadosDoExame.cliente) {
-
-                if(cliente.convenio !== null) {
-
-                    axios.get(`https://clinicamedica-backend.herokuapp.com/api/gerenciar_convenios/${cliente.convenio}`)
-                    
-                    .then( ( res ) => {
-
-                        let desconto = (res.data.desconto)/100;
-
-                        valor = (valor - (valor * desconto));
-                        
-                        setInputValor({...inputValor, valorDoExame: valor});      
-                        setDadosDoExame( { ...dadosDoExame, valor: valor});
-
-                        
-
-                        
-                        
-                    });
-
-                    
-                } else {
-
-                    setInputValor({...inputValor, valorDoExame: valor});
-                    setDadosDoExame( { ...dadosDoExame, valor: valor});
-                }
-            }
-    })
+        
 
     setSelectHora({...selectHora, desabilitado: false});
 
@@ -378,6 +358,25 @@ function AgendarExames() {
     function cancelaAgendamento() {
 
         navigate('/gerenciar_exames_e_procedimentos_agendados')
+    }
+
+    function teste() {
+
+        if(usuarioConectado.perfil === "admin") {
+
+            return clientes.map( ( item) => (
+                            
+                <option key = { item.cpf } value = { item.cpf } > { item.nome}  </option>
+            
+            ))
+
+
+        } else {
+
+            return <option key = { cliente.cpf } value = { cliente.cpf } > { cliente.nome}  </option>
+        }
+
+        
     }
 
     return (
@@ -427,11 +426,7 @@ function AgendarExames() {
                     <select id = "cliente" name = "cliente" onChange = { onChange } onBlur = { onBlurCliente} disabled = { selectCliente.desabilitado } >
 
                             {exibeSelectString(dadosDoExame.cliente)}
-                            { clientes.map( ( cliente ) => (
-                            
-                                <option key = { cliente.cpf } value = { cliente.cpf } > { cliente.nome }  </option>
-                            
-                            ))}
+                            {teste()}
 
                     </select>
 

@@ -6,6 +6,8 @@
     width: 80%;
     margin: 0 auto 0;
     background-color: #eee;
+    flex-grow: 1;
+    flex-shrink: 0;
 }
 
 .areaSuperior {

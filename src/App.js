@@ -386,7 +386,9 @@ export default function App() {
                    
         </div>
      
-        <Header />           
+        <Header /> 
+
+        
           
           <Routes>            
 
@@ -447,6 +449,9 @@ export default function App() {
               
 
           </Routes>
+
+      
+
           </contextFuncionarios.Provider>
           </contextClientes.Provider>
           </contextExamesAgendados.Provider>  
@@ -459,8 +464,8 @@ export default function App() {
           </contextBotaoCadastrar.Provider>
           </contextUsuarioConectado.Provider>
           
-          
-        <Footer dados = { especialidades }/>      
+                  
+        <Footer  dados = { especialidades }/>      
       </>
     </Router>      
   );
