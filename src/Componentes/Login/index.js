@@ -1,8 +1,8 @@
-import React, { useState, useContext } from 'react';
+import React, { useState, useEffect,  useContext } from 'react';
 
 import TituloDaPagina from '../TituloDaPagina';
 
-import { useNavigate } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 
 import styles from './styles.module.css';
 import axios from 'axios';
@@ -25,38 +25,93 @@ function Login() {
 
     const [ dadosDeLogin, setDadosDeLogin ] = useState({});
 
-    function matchLogin() { 
+    const [ clientes, setClientes ] = useState( [] );
 
-        axios.get(`https://clinicamedica-backend.herokuapp.com/api/gerenciar_logins/${dadosDeLogin.cpf}`)
+    const [ cadastrado, setCadastrado ] = useState(0);
+
+    useEffect(() => {        
+
         
-        .then( ( res ) => {
 
-            let senha = res.data.senha;
+            setCadastrado(0);
 
-            if( senha === dadosDeLogin.senha) {
+            axios.get("https://clinicamedica-backend.herokuapp.com/api/gerenciar_logins")
+            .then( (res) => {
 
-                setUsuarioConectado(res.data);
+                const clientes01 = res.data;
+                setClientes(clientes01);
+            });           
+          
+       
 
-                navigate('/area_restrita');
 
-                const dadosDoBotaoCadastrar = {
+    },[dadosDeLogin.cpf]);
 
-                    titulo: "Área do Usuário",
-                    link:"/area_restrita"
-                }
-                setDadosDoBotaoCadastrar( dadosDoBotaoCadastrar );
+    
 
-                const dadosDoBotaoLogin = {
+    useEffect(() => {
 
-                    titulo: "Sair",
-                    link:"/"
-                }
-                setDadosDoBotaoLogin( dadosDoBotaoLogin );
+        clientes.forEach(( item ) => {
+            
+            if(item.cpf !== dadosDeLogin.cpf ) {
+
+                setCadastrado(1);
+            } else {
+
+                setCadastrado(0);
             }
         });
+
+    },[clientes]);
+    
+    
+    
+    function matchLogin() { 
+
+        if(cadastrado === 1) {
+
+            alert("CPF não cadastrado");
+        } else {
+
+            axios.get(`https://clinicamedica-backend.herokuapp.com/api/gerenciar_logins/${dadosDeLogin.cpf}`)
+            
+            .then( ( res ) => {
+
+                let senha = res.data.senha;
+
+                if( senha === dadosDeLogin.senha) {
+
+                    setUsuarioConectado(res.data);
+
+                    navigate('/area_restrita');
+
+                    const dadosDoBotaoCadastrar = {
+
+                        titulo: "Área do Usuário",
+                        link:"/area_restrita"
+                    }
+                    setDadosDoBotaoCadastrar( dadosDoBotaoCadastrar );
+
+                    const dadosDoBotaoLogin = {
+
+                        titulo: "Sair",
+                        link:"/"
+                    }
+                    setDadosDoBotaoLogin( dadosDoBotaoLogin );
+                
+                } else {
+
+                    alert("Senha Inválida");
+                }
+
+
+            });
+        }
             
 
     };
+
+   
 
     function onChange( ev ) {
 
@@ -70,6 +125,8 @@ function Login() {
         <>
 
             <TituloDaPagina tituloDaPagina = { tituloDaPagina } />
+
+            <h1>{cadastrado}</h1>
 
             <section className={ styles.login }>
 
@@ -85,6 +142,8 @@ function Login() {
 
                 <button type= "button" onClick = { matchLogin } > Entrar </button>
                 </form>
+
+                <span> Não tem Login? <Link to = '/cadastrar_login'>Cadastre-se</Link></span>
 
             </section>
 

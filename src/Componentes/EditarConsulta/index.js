@@ -328,14 +328,14 @@ function EditarConsulta( props ) {
                 <div className = { styles.formGroup } >
 
                     <label htmlFor = "data"> Data </label>                    
-                    <input type = "date" id = "data" name = "data" defaultValue = { consultaAgendada.data } onChange = { onChange } />
+                    <input type = "date" id = "data" name = "data" onChange = { onChange } />
 
                 </div>
 
                 <div className = { styles.formGroup } >
 
                     <label htmlFor = "hora" > Hora </label>
-                    <select id = "hora" name = "hora" value = { consultaAgendada.hora } onChange = { onChange } >
+                    <select id = "hora" name = "hora" onChange = { onChange } >
 
                         <option> Selecione... </option>
                         { horariosDisponiveis.map( ( hora ) => (

@@ -10,6 +10,8 @@ import styles from "./styles.module.css";
 
 import { contextUsuarioConectado } from "../../App";
 
+//QUALQUER MERDA QUE DER -------------------- VOlTAR AQUI
+
 function AgendarConsultas() {
 
     const navigate = useNavigate();
@@ -114,8 +116,8 @@ function AgendarConsultas() {
         
         .then( (res) => {
 
-            const especialidades = res.data;
-            setEspecialidades( especialidades );
+            const especialidadesTemp = res.data;
+            setEspecialidades( especialidadesTemp );
         });
 
     }, []);

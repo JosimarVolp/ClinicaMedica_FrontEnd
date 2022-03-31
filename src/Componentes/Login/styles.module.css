@@ -5,7 +5,7 @@
     height: 195px;
     border: #EA1111 1px solid;
     border-radius: 3%;
-    margin: 50px auto;
+    margin: 30px auto 100px;
     padding: 20px;
     
     
@@ -27,15 +27,33 @@
 .formLogin label {
 
     margin-top: 50px;
+    font-weight: bold;
 }
 
 .formLogin button {
 
     background-color: #EA1111;
-    margin: 10px 25% 0 25%;
+    margin: 10px 25% 20px 25%;
     width: 50%;
     /*border-radius: 10%;*/
     color: #fff;
+    padding: 3px 0;
+    
+
+    
+}
+
+
+span {
+
+    color: #000;
+    margin: 30px 37%;
+    font-weight: bold;
+
+
+    
+    /*border-radius: 10%;*/
+    
     
 
     
