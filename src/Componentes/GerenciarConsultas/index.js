@@ -4,8 +4,6 @@ import TituloDaPagina from "../TituloDaPagina";
 
 import axios from "axios";
 
-import Botao from "../Botao";
-
 import styles from "./styles.module.css";
 
 import { useNavigate, Link } from "react-router-dom";
@@ -64,16 +62,7 @@ function GerenciarConsultas() {
         }
 
     }, []);
-
-    
-
-    const dadosDoBotao = [
-
-        {
-            titulo: "Agendar Nova Consulta",
-            link:"/gerenciar_consultas_agendadas/agendar"
-        }
-    ];
+   
 
     function retornaHomeRestrita() {
 
@@ -99,8 +88,8 @@ function GerenciarConsultas() {
 
                     <tr>
 
-                        <th> Paciente </th>
-                        <th> Especialidade </th>
+                        <th className= {styles.header01}> Paciente </th>
+                        <th className= {styles.header01}> Especialidade </th>
                         <th> Médico </th>
                         <th> Data </th>
                         <th> Hora </th>

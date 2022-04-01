@@ -145,6 +145,7 @@ function AgendarConsultas() {
                 valor = especialidade.valor;   
                 
                 setInputValor({...inputValor, valorDaConsulta: valor});
+                setDadosDaConsulta({...dadosDaConsulta, valor: valor});
             }
 
         } );   
@@ -382,20 +383,16 @@ function AgendarConsultas() {
 
         <>
 
-            <TituloDaPagina tituloDaPagina = { tituloDaPagina } />  
-
-            <h1>{dadosDaConsulta.medico}</h1>{}       
-
-            
+            <TituloDaPagina tituloDaPagina = { tituloDaPagina } />              
 
             <form className = { styles.formulario } onSubmit = { onSubmit }>
 
                 <div className = { styles.formGroup } >
 
                     <label htmlFor = "especialidade"> Especialidade </label>
-                    <select id = "especialidade" name = "especialidade" onChange = { onChange }> 
+                    <select id = "especialidade" name = "especialidade" onChange = { onChange } required > 
 
-                        {exibeEspecialidade(dadosDaConsulta.especialidade)}
+                        <option></option>
                         { especialidades.map( ( especialidade ) => (
 
                             <option key = { especialidade.id } value = { especialidade.id }> { especialidade.nome } </option>
@@ -409,9 +406,9 @@ function AgendarConsultas() {
                 <div className = { styles.formGroup } >
 
                     <label htmlFor = "medico"> Médico </label>
-                    <select id = "medico" name = "medico" onChange = { onChange } disabled = { selectMedico.desabilitado } >
+                    <select id = "medico" name = "medico" onChange = { onChange } disabled = { selectMedico.desabilitado } required>
 
-                        {exibeSelectString(dadosDaConsulta.medico)}
+                        <option></option>
                         {medicos.map( (medico) => (
                         
                             <option key = { medico.cpf } value = { medico.cpf } > { medico.nome } </option>
@@ -426,9 +423,9 @@ function AgendarConsultas() {
                 <div className = { styles.formGroup } >
 
                     <label htmlFor = "paciente"> Paciente </label>
-                    <select id = "paciente" name = "paciente" onChange = { onChange } onBlur = { onBlurPaciente} disabled = { selectPaciente.desabilitado } >
+                    <select id = "paciente" name = "paciente" onChange = { onChange } onBlur = { onBlurPaciente} disabled = { selectPaciente.desabilitado } required >
 
-                            {exibeSelectString(dadosDaConsulta.paciente)}
+                        <option></option>
                             {teste()}
                             
 
@@ -440,16 +437,16 @@ function AgendarConsultas() {
 
                     <label htmlFor = "data"> Data </label>
                     
-                    <input type = "date" id = "data" name = "data" onBlur = { onBlur } disabled = { inputData.desabilitado } />
+                    <input type = "date" id = "data" name = "data" onBlur = { onBlur } disabled = { inputData.desabilitado } required/>
 
                 </div>
 
                 <div className = { styles.formGroup } >
 
                     <label htmlFor = "hora" > Hora </label>
-                    <select id = "hora" name = "hora" onChange = { onChange } disabled = { selectHora.desabilitado } >
+                    <select id = "hora" name = "hora" onChange = { onChange } disabled = { selectHora.desabilitado } required >
 
-                        {exibeSelectString(dadosDaConsulta.hora)}
+                        <option></option>
                         { horariosDisponiveis.map( ( hora ) => (
 
                             <option key = { hora } value = { hora }>{ hora }</option>
@@ -463,13 +460,13 @@ function AgendarConsultas() {
                 <div className = { styles.formGroup } >
 
                     <label htmlFor = "valor" > Valor </label>
-                    <input type = "text" id = "valor" name = "valor" value = { inputValor.valorDaConsulta } onChange = { onChange } disabled = { inputValor.habilitado } background = { inputValor.backgroundColor } />
+                    <input type = "text" id = "valor" name = "valor" value = { inputValor.valorDaConsulta } onChange = { onChange } disabled = { inputValor.habilitado } background = { inputValor.backgroundColor } required />
 
                 </div>
 
                 <div className = { styles.caixaDeBotoes }>
 
-                    <button type = "submit" className = { styles.botaoAgendar } > Agendar </button>
+                    <button type = "submit" className = { styles.botaoCadastrar } > Agendar </button>
                     <button type = "button"  onClick = { cancelaAgendamento } className = { styles.botaoVoltar } > Cancelar </button>
 
                 </div>

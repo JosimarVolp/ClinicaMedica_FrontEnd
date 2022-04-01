@@ -23,25 +23,31 @@ function Login() {
     const { setDadosDoBotaoCadastrar } = useContext(contextBotaoCadastrar);
     const { setDadosDoBotaoLogin } = useContext(contextBotaoLogin);
 
-    const [ dadosDeLogin, setDadosDeLogin ] = useState({});
+    const dadosIniciaisDeLogin = {
+
+        cpf: "",        
+        senha: ""
+        
+    };
+
+    const [ dadosDeLogin, setDadosDeLogin ] = useState(dadosIniciaisDeLogin);
 
     const [ clientes, setClientes ] = useState( [] );
 
-    const [ cadastrado, setCadastrado ] = useState(0);
+    const [ cadastrado, setCadastrado ] = useState(1);
 
     useEffect(() => {        
 
-        
+        if(dadosDeLogin.cpf.length === 11) {
 
-            setCadastrado(0);
-
-            axios.get("https://clinicamedica-backend.herokuapp.com/api/gerenciar_logins")
+             axios.get("https://clinicamedica-backend.herokuapp.com/api/gerenciar_logins")
             .then( (res) => {
 
                 const clientes01 = res.data;
                 setClientes(clientes01);
-            });           
-          
+            });  
+                   
+        }
        
 
 
@@ -51,15 +57,21 @@ function Login() {
 
     useEffect(() => {
 
-        clientes.forEach(( item ) => {
-            
-            if(item.cpf !== dadosDeLogin.cpf ) {
+        setCadastrado(1);
+        
 
-                setCadastrado(1);
-            } else {
+        clientes.map(( item ) => {
+
+            console.log("CPF Salvo: " + item.cpf); 
+            console.log("CPF Digitado: " + dadosDeLogin.cpf);            
+            
+            if(item.cpf == dadosDeLogin.cpf ) {
 
                 setCadastrado(0);
-            }
+                console.log("São iguais");
+                
+                
+            } 
         });
 
     },[clientes]);
@@ -124,19 +136,17 @@ function Login() {
 
         <>
 
-            <TituloDaPagina tituloDaPagina = { tituloDaPagina } />
-
-            <h1>{cadastrado}</h1>
+            <TituloDaPagina tituloDaPagina = { tituloDaPagina } />            
 
             <section className={ styles.login }>
 
                 <form  className = {styles.formLogin}>
 
                     <label htmlFor = "cpf" > CPF </label>
-                    <input type="text" id = "cpf" name = "cpf" onChange = { onChange } />
+                    <input type="text" id = "cpf" name = "cpf" onChange = { onChange } required/>
 
                     <label htmlFor = "senha"> Senha </label>
-                    <input type="text" id = "senha" name = "senha" onChange = { onChange } />
+                    <input type="password" id = "senha" name = "senha" onChange = { onChange } required/>
 
                 
 
@@ -149,6 +159,6 @@ function Login() {
 
         </>
     );
-};
+}
 
 export default Login;

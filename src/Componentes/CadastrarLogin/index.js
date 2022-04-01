@@ -174,11 +174,7 @@ function CadastrarLogin() {
 
         <>
 
-            <TituloDaPagina tituloDaPagina = { tituloDaPagina } />
-
-            <h1>{cadastrado}</h1>
-            <h1>{verificaSenha}</h1>
-            <h1>{verificaSenha02}</h1>
+            <TituloDaPagina tituloDaPagina = { tituloDaPagina } />            
 
             <form className = { styles.formulario } onSubmit = { onSubmit } >
 

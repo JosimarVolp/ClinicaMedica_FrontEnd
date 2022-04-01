@@ -101,7 +101,7 @@ function EditarConsulta( props ) {
 
     useEffect( () => {
 
-        axios.get('https://clinicamedica-backend.herokuapp.com/api/gerenciar_clientes')
+        axios.get('https://clinicamedica-backend.herokuapp.com/api/gerenciar_logins')
         
         .then( (res) => {
 
@@ -265,7 +265,6 @@ function EditarConsulta( props ) {
             });
         
     }
-
     
 
     return (
@@ -279,7 +278,7 @@ function EditarConsulta( props ) {
                 <div className = { styles.formGroup } >
 
                     <label htmlFor = "especialidade"> Especialidade </label>
-                    <select id = "especialidade" name = "especialidade" value = { consultaAgendada.especialidade } onChange = { onChange } > 
+                    <select id = "especialidade" name = "especialidade" value = { consultaAgendada.especialidade } onChange = { onChange } disabled required > 
 
                         <option> Selecione... </option>
                         { especialidades.map( ( especialidade ) => (
@@ -295,7 +294,7 @@ function EditarConsulta( props ) {
                 <div className = { styles.formGroup } >
 
                     <label htmlFor = "medico"> Médico </label>
-                    <select id = "medico" name = "medico" value = { consultaAgendada.medico } onChange = { onChange } >
+                    <select id = "medico" name = "medico" value = { consultaAgendada.medico } onChange = { onChange } disabled required >
                     
                         <option> Selecione... </option>
                         {medicos.map( (medico) => (
@@ -311,7 +310,7 @@ function EditarConsulta( props ) {
                 <div className = { styles.formGroup } >
 
                     <label htmlFor = "paciente"> Paciente </label>
-                    <select id = "paciente" name = "paciente" value = { consultaAgendada.paciente } onChange = { onChange } >
+                    <select id = "paciente" name = "paciente" value = { consultaAgendada.paciente } onChange = { onChange } disabled required >
 
                         {pacientes.map( (paciente) => (
                             
@@ -328,16 +327,16 @@ function EditarConsulta( props ) {
                 <div className = { styles.formGroup } >
 
                     <label htmlFor = "data"> Data </label>                    
-                    <input type = "date" id = "data" name = "data" onChange = { onChange } />
+                    <input type = "date" id = "data" name = "data" onChange = { onChange } required />
 
                 </div>
 
                 <div className = { styles.formGroup } >
 
                     <label htmlFor = "hora" > Hora </label>
-                    <select id = "hora" name = "hora" onChange = { onChange } >
+                    <select id = "hora" name = "hora" onChange = { onChange } required >
 
-                        <option> Selecione... </option>
+                        <option> </option>
                         { horariosDisponiveis.map( ( hora ) => (
 
                             <option key = { hora } value = { hora }>{ hora }</option>
@@ -351,7 +350,7 @@ function EditarConsulta( props ) {
                 <div className = { styles.formGroup } >
 
                     <label htmlFor = "valor" > Valor </label>
-                    <input type = "text" id = "valor" name = "valor" defaultValue = { consultaAgendada.valor } disabled = {true} />
+                    <input type = "text" id = "valor" name = "valor" defaultValue = { consultaAgendada.valor } disabled = {true} required />
 
                 </div>
 

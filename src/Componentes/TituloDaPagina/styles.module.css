@@ -1,9 +1,12 @@
 .caixaDoTitulo {
 
     width: 80%;
-    height: 80px;
+    height: 12vh;
     background-color: #EA1111;
-    margin: 30px 10%
+    margin: 30px 10%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
 
 }
 
@@ -11,5 +14,31 @@
 
     text-align: center;
     color: white;
-    padding-top: 20px;
+    
+    font-size: 32px;
+    
+}
+
+@media (max-width: 800px) {
+
+    .caixaDoTitulo {
+
+        width: 80%;
+        height: 12vh;
+        background-color: #EA1111;
+        margin: 30px 10%;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+    
+    }
+
+    .caixaDoTitulo h1 {
+
+        text-align: center;
+        color: white;
+        
+        font-size: 20px;
+    }
+    
 }

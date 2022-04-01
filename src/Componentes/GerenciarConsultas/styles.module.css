@@ -125,3 +125,85 @@ tfoot td {
     background-color: #EA1111;
     color: #fff;
 }
+
+@media (max-width: 800px) {
+
+    .header01 {
+
+        display: none;
+    }
+    
+
+    thead th{
+
+        color: #fff;
+        background-color: #EA1111;
+        text-align: center;
+        padding: 2px;
+        border: #000 solid 2px;
+    }
+    
+    .coluna01{
+
+        display: none;    
+        background-color: #fff;
+        text-align: center;
+        padding: 5px;
+        border: #000 solid 2px;
+        width: 18%;
+    }
+    
+    .coluna02{
+
+        display: none; 
+    
+        background-color: #fff;
+        text-align: center;
+        padding: 5px;
+        border: #000 solid 2px;
+        width: 18%;
+    }
+    
+    .coluna03{
+    
+        background-color: #fff;
+        text-align: center;
+        padding: 5px;
+        border: #000 solid 2px;
+        width: 18%;
+    }
+    .coluna04{
+    
+        background-color: #fff;
+        text-align: center;
+        padding: 5px;
+        border: #000 solid 2px;
+        width: 18%;
+    }
+    .coluna05{
+    
+        background-color: #fff;
+        text-align: center;
+        padding: 5px;
+        border: #000 solid 2px;
+        width: 18%;
+    }
+    .coluna06{
+    
+        background-color: #fff;
+        text-align: center;
+        padding: 5px;
+        border: #000 solid 2px;
+        width: 10%;
+    }
+    
+    tfoot td {
+    
+        color: #fff;
+        background-color: #EA1111;
+        text-align: center;
+        padding: 5px;
+        border: #000 solid 2px;
+    }
+    
+}
