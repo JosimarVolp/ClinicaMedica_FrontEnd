@@ -112,45 +112,48 @@ function AgendarConsultas() {
    //Este useEffect busca todas as especialidades do DB para preencher o select "Especialidade"
     useEffect( () => {
 
-        axios.get('https://clinicamedica-backend.herokuapp.com/api/gerenciar_especialidades')
         
-        .then( (res) => {
+            axios.get('https://clinicamedica-backend.herokuapp.com/api/gerenciar_especialidades')
+            
+            .then( (res) => {
 
-            const especialidadesTemp = res.data;
-            setEspecialidades( especialidadesTemp );
-        });
+                const especialidadesTemp = res.data;
+                setEspecialidades( especialidadesTemp );
+            });
+        
 
     }, []);
 
     //Este useEffect busca todos os médicos do DB para preencher o select "Médico" de acordo com a especialidade selecionada
     useEffect( () => {
 
-        if(dadosDaConsulta.especialidade !== 0)
+        if((dadosDaConsulta.especialidade !== 0)) {
 
-        setSelectMedico({...selectMedico, desabilitado: false})
+            setSelectMedico({...selectMedico, desabilitado: false})
 
-        axios.get(`https://clinicamedica-backend.herokuapp.com/api/gerenciar_medicos/especialidades/${dadosDaConsulta.especialidade}`)
+            axios.get(`https://clinicamedica-backend.herokuapp.com/api/gerenciar_medicos/especialidades/${dadosDaConsulta.especialidade}`)
         
-        .then( (res) => {
+            .then( (res) => {
 
-            
-            const medicos = res.data;
-            setMedicos( medicos );
-            var valor = 0;
-        
-            especialidades.map( ( especialidade) => {           
-
-            if(especialidade.id == dadosDaConsulta.especialidade) {
-
-                valor = especialidade.valor;   
                 
-                setInputValor({...inputValor, valorDaConsulta: valor});
-                setDadosDaConsulta({...dadosDaConsulta, valor: valor});
-            }
+                const medicos = res.data;
+                setMedicos( medicos );
+                var valor = 0;
+            
+                especialidades.map( ( especialidade) => {           
 
-        } );   
+                    if(especialidade.id == dadosDaConsulta.especialidade) {
+
+                        valor = especialidade.valor;   
+                        
+                        setInputValor({...inputValor, valorDaConsulta: valor});
+                        setDadosDaConsulta({...dadosDaConsulta, valor: valor});
+                    }
+
+                } );   
             
         });
+    }
 
     }, [dadosDaConsulta.especialidade]);
 
@@ -158,7 +161,7 @@ function AgendarConsultas() {
     //Este useEffect busca todas as consultas do DB de acordo com o médico selecionado, dessas consultas sairão os horário possíveis
     useEffect( ( ) => {
 
-        if(dadosDaConsulta.medico !== ""){
+        if((dadosDaConsulta.medico !== "")&&(dadosDaConsulta.medico !== 0) ){
 
         //console.log("Teste");
 
@@ -297,7 +300,13 @@ function AgendarConsultas() {
         
         .then( (response) => {
 
-            alert("Consulta salva com sucesso!!!");
+            console.log("Especialidade: " +dadosDaConsulta.especialidade);
+            console.log("Médico: " +dadosDaConsulta.medico);
+            console.log("Paciente: " +dadosDaConsulta.paciente);
+            console.log("Data: " +dadosDaConsulta.data);
+            console.log("Hora: " +dadosDaConsulta.hora);
+            console.log("Valor: " +dadosDaConsulta.valor);
+            alert("Consulta agendada com sucesso!!!");
             navigate("/gerenciar_consultas_agendadas")
         });
     }
@@ -466,7 +475,7 @@ function AgendarConsultas() {
 
                 <div className = { styles.caixaDeBotoes }>
 
-                    <button type = "submit" className = { styles.botaoCadastrar } > Agendar </button>
+                    <button type = "submit" className = { styles.botaoAgendar } > Agendar </button>
                     <button type = "button"  onClick = { cancelaAgendamento } className = { styles.botaoVoltar } > Cancelar </button>
 
                 </div>

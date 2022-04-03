@@ -69,6 +69,16 @@ function GerenciarExamesAgendados() {
     
     },[]);
 
+    function transformaData( exame ) {
+
+        var ano = exame.data.substring(0, 4);
+        var mes = exame.data.substring(5, 7);            
+        var dia = exame.data.substring(8, 10);            
+                
+        return dia+"/"+mes+"/"+ano;
+
+    }
+
     //---------------------------------------------------------------------------------------------------
 
     function retornaHomeRestrita() {
@@ -96,9 +106,9 @@ function GerenciarExamesAgendados() {
 
                     <tr>
 
-                        <th> Cliente </th>
+                        <th className = {styles.header01} > Cliente </th>
                         <th> Exame / Procedimento </th>
-                        <th> Funcionário </th>                        
+                        <th className = {styles.header01}> Funcionário </th>                        
                         <th> Data </th>
                         <th> Hora </th>
                         <th></th>
@@ -116,8 +126,8 @@ function GerenciarExamesAgendados() {
                             <td className = { styles.coluna01 }> { exame.cliente } </td>
                             <td className = { styles.coluna02 }> { exame.exame } </td>
                             <td className = { styles.coluna03 }> { exame.funcionario } </td>
-                            <td className = { styles.coluna04 }> { exame.data } </td>
-                            <td className = { styles.coluna05 }> { exame.hora } </td>
+                            <td className = { styles.coluna04 }> { transformaData(exame) } </td>
+                            <td className = { styles.coluna05 }> { exame.hora.substring(0, 5) } </td>
                             <td className = { styles.coluna06 }><Link to = {`/gerenciar_exames_e_procedimentos_agendados/editar/${exame.id}`} ><button className = { styles.botaoEditar } onClick = { () => setIdDoExameAgendadoParaEditar(exame.id) } > Editar </button></Link></td>
                             
 

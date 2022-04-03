@@ -1,8 +1,8 @@
-import axios from "axios";
-
 import React, { useState, useEffect } from "react";
 
 import { useNavigate } from "react-router-dom";
+
+import axios from "axios";
 
 import TituloDaPagina from "../TituloDaPagina";
 
@@ -10,32 +10,38 @@ import styles from "./styles.module.css";
 
 function EditarExamesAgendados( props ) {
 
+    //Título que será mostrado na "Barra de"
+    const tituloDaPagina = "Editar Exames / Procedimentos";   
+
     const navigate = useNavigate();
 
-    const tituloDaPagina = "Editar Exame / Procedimento";
-
+    //Este array guarda todos os horários possíveis de se ter uma consulta
     var [ horariosTotal, setHorariosTotal ] = useState(["08:00:00", "08:30:00", "09:00:00", "09:30:00", "10:00:00", "10:30:00", "11:00:00", "11:30:00", "14:00:00", "14:30:00", "15:00:00", "15:30:00", "16:00:00", "16:30:00", "17:00:00", "17:30:00"]);
 
+    //Este estado guarda todos os horários já agendados para o médico e o dia escolhido nos inputs "Médico" e "Data"
     var [ horariosMarcados, setHorariosMarcados ] = useState([]);
 
+    //Este estado guarda todos os horários ainda disponíveis para o médico e o dia escolhido nos inputs "Médico" e "Data"
     var [ horariosDisponiveis, setHorariosDisponiveis ] = useState([]);
-    
-    const [exameAgendado, setExameAgendado] = useState({});
+
+    const [ exameAgendado, setExameAgendado] = useState({});
 
     const [ exames, setExames] = useState([]);
+
+    const [ examesFuncionario, setExamesFuncionario ] = useState([]);
 
     const [ funcionarios, setFuncionarios ] = useState([]);
 
     const [ clientes, setClientes ] = useState([]);
-
+    
     useEffect( () => {
 
         axios.get('https://clinicamedica-backend.herokuapp.com/api/gerenciar_exames_e_procedimentos')
         
         .then( (res) => {
 
-            const exames = res.data;
-            setExames( exames );
+            const examesTemp = res.data;
+            setExames( examesTemp );
         });
 
     }, []);
@@ -56,6 +62,7 @@ function EditarExamesAgendados( props ) {
         if(exameAgendado.data !== undefined) {
 
             var dataEditada = exameAgendado.data.substring(0, 10);
+            setExameAgendado({...exameAgendado, funcionario: exameAgendado.funcionario});
             setExameAgendado({...exameAgendado, data: dataEditada});
             
             
@@ -65,104 +72,84 @@ function EditarExamesAgendados( props ) {
 
     useEffect( () => {
 
-        if( exameAgendado.exame !== 0 ) {
+        if((exameAgendado.exame !== 0) && (exameAgendado.exame !== undefined)) {
+
+            //setSelectMedico({...selectMedico, desabilitado: false})
 
             axios.get(`https://clinicamedica-backend.herokuapp.com/api/gerenciar_funcionarios/${exameAgendado.exame}`)
             
-            .then( ( res ) => {
-
-                let funcionarios = res.data;
-                setFuncionarios( funcionarios );
+            .then( (res) => {
+                
+                const funcionariosTemp = res.data;
+                setFuncionarios( funcionariosTemp );            
+                
             });
         }
-    
-    },[ exameAgendado.exame]);
+
+    }, [exameAgendado.exame]);
 
     useEffect( () => {
 
-        axios.get('https://clinicamedica-backend.herokuapp.com/api/gerenciar_clientes')
+        axios.get('https://clinicamedica-backend.herokuapp.com/api/gerenciar_logins')
         
         .then( (res) => {
 
-            const clientes = res.data;
-            setClientes( clientes );
+            const pacientes = res.data;
+            setClientes( pacientes );
             
         });
 
     }, []);
 
-    function onChange( ev ) {
+    useEffect( ( ) => {
 
-        const { name, value } = ev.target;
-        setExameAgendado( {...exameAgendado, [ name]:value } )
-        console.log({name: value});
-    }
+        if((exameAgendado.funcionario !== "") && (exameAgendado.funcionario !== undefined)) {
 
-    function onSubmit( ev ) {
+        //console.log("Teste");
 
-        ev.preventDefault();
-        axios.put('https://clinicamedica-backend.herokuapp.com/api/gerenciar_exames_e_procedimentos_agendados', exameAgendado)
-        
-        .then( ( response ) => {
-
-            console.log("ID: "+exameAgendado.id);
-            console.log("Exame:" +exameAgendado.exame);
-            console.log("Funcionario: "+exameAgendado.funcionario);
-            console.log("Cliente "+exameAgendado.cliente);
-            console.log("Data: "+exameAgendado.data);
-            console.log("Hora: "+exameAgendado.hora);
-            console.log("Valor: "+exameAgendado.valor);
-            console.log("Resultado: "+exameAgendado.resultado);
-
-            alert("Exame agendado alterado com sucesso");
-
-         });
-    }
-
-    const [examesAgendadosPorFuncionario, setExamesAgendadosPorFuncionario] = useState([])
-
-    useEffect( () => {
+        //setSelectPaciente({...selectPaciente, desabilitado: false  })
 
         axios.get(`https://clinicamedica-backend.herokuapp.com/api/gerenciar_exames_e_procedimentos_agendados/funcionario/${exameAgendado.funcionario}`)
-        
-        .then(( res ) => {
-    
-            let examesAgendadosPorFuncionario = res.data;
-            setExamesAgendadosPorFuncionario( examesAgendadosPorFuncionario );
-    
-        });
-    
-       },[exameAgendado.funcionario]);
-    
-       //--------------------------------------------------------------------------------------------
-    
-       useEffect( () => {
-    
-        examesAgendadosPorFuncionario.forEach( (exame) => {
-    
-            console.log(new Date());
-    
-            var dataDB = new Date(exame.data).toLocaleDateString('pt-BR');
-            console.log("Data que vem do DB: " +dataDB);
-    
-            console.log("Valor do Input antes de converter: " +exameAgendado.data);
-            
-            //var dataInput = new Date(dadosDaConsulta.data).toLocaleDateString('pt-BR');
-    
-            var dataInput = new Date(exame.data).toLocaleDateString('pt-BR');
-            
-            console.log("Valor do Input depois de Converter: dataInput: " +dataInput);            
-    
-            if(dataDB ===  dataInput) {
-    
-                console.log("Deu Match");                
-    
-                setHorariosMarcados([...horariosMarcados, exame.hora]);
-    
                 
+        .then( ( res ) => {
+
+            let examesTemp = res.data;
+            setExamesFuncionario( examesTemp );
+        });
+    }
     
+    }, [exameAgendado.funcionario]);
+
+    //Este useEffect prenche os horários disponíveis
+    useEffect( () => {
+
+        var teste = [];
+        setHorariosMarcados([]);
+
+        examesFuncionario.forEach( (exame) => {
+
+            var dataDB = exame.data;
+            var dataDB = dataDB.substring(0, 10);
+                      
+            //var dataInput = new Date(dadosDaConsulta.data).toLocaleDateString('pt-BR');
+
+            var dataInput = exameAgendado.data;
+            
+            
+
+            if(dataDB ===  dataInput) {
+
+                console.log("Deu Match");       
+                
+                teste.push(examesFuncionario.hora);
+
+                //setHorariosMarcados([...horariosMarcados, consulta.hora]);
+                //setSelectHora({...selectHora, desabilitado: false});
+
+                
+
                 console.log("Horários Disponíveis: " +horariosDisponiveis);
-                console.log("Horários Marcados: " +horariosMarcados);
+                console.log("Horários Marcados: " +teste);
                 console.log("Horários Total: " +horariosTotal);
                 
                
@@ -170,11 +157,14 @@ function EditarExamesAgendados( props ) {
             }           
             
          } )
-    
-    
-       }, [exameAgendado.data]);
+         
+         //console.log(horariosMarcados);
+         setHorariosMarcados(teste);
+         
 
-       useEffect(() => {
+    },[exameAgendado.data]);
+
+    useEffect(() => {
 
         console.log("Horários Marcados: " +horariosMarcados);
 
@@ -198,26 +188,48 @@ function EditarExamesAgendados( props ) {
         
         });
 
-        //var horariosDisponiveis01 
+        var horariosDisponiveis01 
 
-        //console.log("Horarios Disponiveis 01: " +horariosDisponiveis01);
+        console.log("Horarios Disponiveis 01: " +horariosDisponiveis01);
         console.log("Horarios Total 01: " +horariosTotal01);
 
         setHorariosDisponiveis( filtro );
 
-        console.log("Horarios Disponiveis: " +horariosDisponiveis);
-
 
     }, [horariosMarcados]);
 
-    function onBlur( ev ) {
+    function onChange( ev ) {
 
-             
-        setExameAgendado( { ...exameAgendado, data: ev.target.value } );
+        const { name, value } = ev.target;
+        /*console.log("Name" +name)
+        console.log("Length" +value.length)
+        if(name === "data" && value.length < 10) {
+
+            return ;
+            
+            
+        }*/
+        setExameAgendado( { ...exameAgendado, [name]: value } );
 
     };
 
-    
+    function onSubmit( ev ) {
+
+        ev.preventDefault();
+        
+
+        axios.put('https://clinicamedica-backend.herokuapp.com/api/gerenciar_exames_e_procedimentos_agendados', exameAgendado)
+
+
+        
+        .then( (response) => {
+
+            alert("Exame / Procedimento alterado com sucesso!!!");
+            navigate("/gerenciar_exames_e_procedimentos_agendados")
+        });
+    }
+
+
 
     function voltaAoGerenciador() {
 
@@ -230,30 +242,48 @@ function EditarExamesAgendados( props ) {
             
             .then( ( response ) => {
 
-                alert("Exame desmarcado com sucesso!!!");
-                navigate('/gerenciar_exames_e_procedimentos_agendados');
+                alert("Exame / Procedimento desmarcado com sucesso!!!");
+                navigate("/gerenciar_exames_e_procedimentos_agendados")
             });
         
     }
     
+
     return (
-        
+
         <>
 
-            <TituloDaPagina tituloDaPagina = { tituloDaPagina } />
+            <TituloDaPagina tituloDaPagina = { tituloDaPagina } />      
 
-            <form className = { styles.formulario }  onSubmit={ onSubmit }>
+            <form className = { styles.formulario } onSubmit = { onSubmit } >
 
                 <div className = { styles.formGroup } >
 
-                    <label htmlFor = "exame" > Exame / Procedimento </label>
-                    <select id = "exame" name = "exame" value = { exameAgendado.exame } onChange = { onChange } >
+                    <label htmlFor = "exame"> Exame </label>
+                    <select id = "exame" name = "exame" value = { exameAgendado.exame } onChange = { onChange } disabled required > 
 
-                        {exames.map(( item ) => (
+                        <option> Selecione... </option>
+                        { exames.map( ( exame ) => (
 
-                            <option key = { item.id } value = { item.id } > { item.nome } </option>
-                        ))}
+                            <option key = { exame.id } value = { exame.id }> { exame.nome } </option>
+
+                        ) )}
+
+                    </select>
+
+                </div>
+
+                <div className = { styles.formGroup } >
+
+                    <label htmlFor = "funcionario"> Funcionário </label>
+                    <select id = "funcionario" name = "funcionario" value = { exameAgendado.funcionario } onChange = { onChange } disabled required >
+                    
+                        <option> Selecione... </option>
+                        {funcionarios.map( (funcionario) => (
+                            
+                            <option key = { funcionario.cpf } value = { funcionario.cpf } > { funcionario.nome } </option>
                         
+                        ))}                    
 
                     </select>
 
@@ -261,29 +291,16 @@ function EditarExamesAgendados( props ) {
 
                 <div className = { styles.formGroup } >
 
-                    <label htmlFor = "funcionario">  Funcionário </label>
-                    <select id = "funcionario" name = "funcionario" value = { exameAgendado.funcionario } onChange = { onChange } >
+                    <label htmlFor = "cliente"> Cliente </label>
+                    <select id = "cliente" name = "cliente" value = { exameAgendado.cliente } onChange = { onChange } disabled required >
 
-                        {funcionarios.map(( item ) => (
-
-                            <option key = { item.cpf } value = { item.cpf } > { item.nome } </option>
-
-                        ))}
+                        {clientes.map( (cliente) => (
+                            
+                            <option key = { cliente.cpf } value = { cliente.cpf } > { cliente.nome}  </option>
                         
-                    </select>
+                        ))}
 
-                </div>
-
-                <div className = { styles.formGroup } >
-
-                    <label htmlFor = "cliente">  Cliente </label>
-                    <select id = "cliente" name = "cliente" value = { exameAgendado.cliente } onChange = { onChange } >
-
-                        {clientes.map(( item ) => (
-
-                            <option key = { item.cpf } value = { item.cpf } > { item.nome } </option>
-
-                        ))}  
+                            
 
                     </select>
 
@@ -291,21 +308,22 @@ function EditarExamesAgendados( props ) {
 
                 <div className = { styles.formGroup } >
 
-                    <label htmlFor = "data"> Data </label>
-                    <input type = "date" id = "data" name = "data" defaultValue = { exameAgendado.data } onChange = { onChange } />
+                    <label htmlFor = "data"> Data </label>                    
+                    <input type = "date" id = "data" name = "data" onChange = { onChange } required />
 
                 </div>
 
                 <div className = { styles.formGroup } >
 
                     <label htmlFor = "hora" > Hora </label>
-                    <select id = "hora" name = "hora" value = { exameAgendado.hora } onBlur = { onBlur } >
-                            
-                        { horariosDisponiveis.map( ( horario ) => (
+                    <select id = "hora" name = "hora" onChange = { onChange } required >
 
-                            <option key = { horario } value = { horario } > { horario } </option>
+                        <option> </option>
+                        { horariosDisponiveis.map( ( hora ) => (
 
-                        )) }                        
+                            <option key = { hora } value = { hora }>{ hora }</option>
+
+                        ))}
 
                     </select>
 
@@ -314,7 +332,7 @@ function EditarExamesAgendados( props ) {
                 <div className = { styles.formGroup } >
 
                     <label htmlFor = "valor" > Valor </label>
-                    <input type = "text" id = "valor" name = "valor" defaultValue = { exameAgendado.valor }  disabled = {true} />
+                    <input type = "text" id = "valor" name = "valor" defaultValue = { exameAgendado.valor } disabled = {true} required />
 
                 </div>
 
@@ -326,7 +344,7 @@ function EditarExamesAgendados( props ) {
 
                 </div>
 
-            </form>            
+            </form>
 
         </>
 

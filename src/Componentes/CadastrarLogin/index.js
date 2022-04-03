@@ -87,7 +87,7 @@ function CadastrarLogin() {
 
         } else if(verificaSenha02 === 1) {
 
-            alert("A senha tem de ter no mínimo 6 caracteres");
+            alert("A senha deve ter no mínimo 6 caracteres");
 
 
 

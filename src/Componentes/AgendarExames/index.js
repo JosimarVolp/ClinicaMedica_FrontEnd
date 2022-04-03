@@ -57,7 +57,7 @@ function AgendarExames() {
     //-------------------------------------------------------------------------------------------------
 
     //Título que será mostrado na "Barra de"
-    const tituloDaPagina = "Agendar Exames e Procedimentos";   
+    const tituloDaPagina = "Agendar Exames / Procedimentos";   
 
     //Este estado guada os dados de todas as especialidades cadastradas no DB    
     const [ examesDB, setExamesDB ] = useState([]);
@@ -143,6 +143,7 @@ function AgendarExames() {
                 valor = exame.valor;   
                 
                 setInputValor({...inputValor, valorDoExame: valor});
+                setDadosDoExame({...dadosDoExame, valor: valor});
             }
 
         } );   
@@ -294,7 +295,7 @@ function AgendarExames() {
         
         .then( (response) => {
 
-            alert("Exame agendado com sucesso!!!");
+            alert("Exame / Procedimento agendado com sucesso!!!");
             navigate("/gerenciar_exames_e_procedimentos_agendados")
         });
     }
@@ -390,9 +391,9 @@ function AgendarExames() {
                 <div className = { styles.formGroup } >
 
                     <label htmlFor = "exame"> Exame / Procedimento </label>
-                    <select id = "exame" name = "exame" onChange = { onChange }> 
+                    <select id = "exame" name = "exame" onChange = { onChange }  required>  
 
-                        {exibeExame(dadosDoExame.exame)}
+                        <option></option>
                         { examesDB.map( ( exame ) => (
 
                             <option key = { exame.id } value = { exame.id }> { exame.nome } </option>
@@ -406,9 +407,9 @@ function AgendarExames() {
                 <div className = { styles.formGroup } >
 
                     <label htmlFor = "funcionario"> Funcionário </label>
-                    <select id = "funcionario" name = "funcionario" onChange = { onChange } disabled = { selectFuncionario.desabilitado } >
+                    <select id = "funcionario" name = "funcionario" onChange = { onChange } disabled = { selectFuncionario.desabilitado } required>
 
-                        {exibeSelectString(dadosDoExame.funcionario)}
+                        <option></option>
                         {funcionarios.map( ( funcionario ) => (
                         
                             <option key = { funcionario.cpf } value = { funcionario.cpf } > { funcionario.nome } </option>
@@ -423,10 +424,10 @@ function AgendarExames() {
                 <div className = { styles.formGroup } >
 
                     <label htmlFor = "cliente"> Cliente </label>
-                    <select id = "cliente" name = "cliente" onChange = { onChange } onBlur = { onBlurCliente} disabled = { selectCliente.desabilitado } >
+                    <select id = "cliente" name = "cliente" onChange = { onChange } onBlur = { onBlurCliente} disabled = { selectCliente.desabilitado } required >
 
-                            {exibeSelectString(dadosDoExame.cliente)}
-                            {teste()}
+                        <option></option>    
+                        {teste()}
 
                     </select>
 
@@ -435,16 +436,16 @@ function AgendarExames() {
                 <div className = { styles.formGroup } >
 
                     <label htmlFor = "data"> Data </label>                    
-                    <input type = "date" id = "data" name = "data" onBlur = { onBlur } disabled = { inputData.desabilitado } />
+                    <input type = "date" id = "data" name = "data" onBlur = { onBlur } disabled = { inputData.desabilitado } required/>
 
                 </div>
 
                 <div className = { styles.formGroup } >
 
                     <label htmlFor = "hora" > Hora </label>
-                    <select id = "hora" name = "hora" onChange = { onChange } disabled = { selectHora.desabilitado } >
+                    <select id = "hora" name = "hora" onChange = { onChange } disabled = { selectHora.desabilitado } required >
 
-                        {exibeSelectString(dadosDoExame.hora)}
+                        <option></option>
                         { horariosDisponiveis.map( ( hora ) => (
 
                             <option key = { hora } value = { hora }>{ hora }</option>
@@ -458,7 +459,7 @@ function AgendarExames() {
                 <div className = { styles.formGroup } >
 
                     <label htmlFor = "valor" > Valor </label>
-                    <input type = "text" id = "valor" name = "valor" value = { inputValor.valorDoExame } onChange = { onChange } disabled = { inputValor.habilitado } background = { inputValor.backgroundColor } />
+                    <input type = "text" id = "valor" name = "valor" value = { inputValor.valorDoExame } onChange = { onChange } disabled = { inputValor.habilitado } background = { inputValor.backgroundColor } required/>
 
                 </div>
 

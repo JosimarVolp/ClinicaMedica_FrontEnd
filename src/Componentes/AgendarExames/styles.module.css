@@ -68,36 +68,75 @@
 .caixaDeBotoes {
 
     width: 40%;
-    margin: 30px auto;    
+    
+    margin: 25px auto;    
     display: flex;
     flex-direction: row;
-    justify-content: center;
+    justify-content: space-around;
     flex-wrap: wrap;
 }
 
 .botaoAgendar {
 
-    width: 40%;
-    
+    width: 28%;    
+    min-width: 80px;
     padding: 5px;
-    margin: 0 20px 0 0;
+    margin-bottom: 5px;
+    
     background-color: #EA1111;
     color: #fff;
+
 }
-
-
 
 .botaoVoltar {
 
-    width: 40%;
-    
+    width: 28%;    
+    min-width: 80px;
     padding: 5px;
-    margin: 0 0 0 20px;
+    margin-bottom: 5px;
     background-color: #EA1111;
     color: #fff;
+
 }
 
 .botaoCadastrar a:link {
 
     color: #fff;
+}
+
+@media (max-width: 800px) {
+
+    .caixaDeBotoes {
+
+        width: 40%;
+        margin: 30px auto;    
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        
+        
+    }
+    
+    .botaoAgendar {
+    
+        width: 100%;
+        
+        padding: 5px;
+        margin-bottom: 10px;
+        background-color: #EA1111;
+        color: #fff;
+    }
+    
+    
+    
+    .botaoVoltar {
+    
+        width: 100%;
+        
+        padding: 5px;
+        
+        background-color: #EA1111;
+        color: #fff;
+    }    
+    
 }

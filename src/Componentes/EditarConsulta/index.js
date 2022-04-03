@@ -242,7 +242,7 @@ function EditarConsulta( props ) {
         
         .then( (response) => {
 
-            alert("Consulta salva com sucesso!!!");
+            alert("Consulta alterada com sucesso!!!");
             navigate("/gerenciar_consultas_agendadas")
         });
     }

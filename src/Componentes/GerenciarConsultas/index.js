@@ -30,6 +30,8 @@ function GerenciarConsultas() {
 
         if(usuarioConectado.perfil === "cliente") {
 
+            
+
             axios.get(`https://clinicamedica-backend.herokuapp.com/api/gerenciar_consultas/paciente/${usuarioConectado.cpf}`)
                 
             .then( ( res ) => {
@@ -62,6 +64,16 @@ function GerenciarConsultas() {
         }
 
     }, []);
+
+    function transformaData( consulta ) {
+
+        var ano = consulta.data.substring(0, 4);
+        var mes = consulta.data.substring(5, 7);            
+        var dia = consulta.data.substring(8, 10);            
+                
+        return dia+"/"+mes+"/"+ano;
+
+    }
    
 
     function retornaHomeRestrita() {
@@ -111,7 +123,7 @@ function GerenciarConsultas() {
                             <td className = { styles.coluna01 }> { consulta.paciente } </td>
                             <td className = { styles.coluna02 }> { consulta.especialidade } </td>
                             <td className = { styles.coluna03 }> { consulta.medico } </td>
-                            <td className = { styles.coluna04 }> { consulta.data.substring(0, 10) } </td>
+                            <td className = { styles.coluna04 }> { transformaData(consulta) } </td>
                             <td className = { styles.coluna05 }> { consulta.hora.substring(0, 5) } </td>
                             <td className = { styles.coluna06 }><Link to = { `/gerenciar_consultas_agendadas/editar/${consulta.id}`}  > <button onClick = { () => setIdDaConsultaParaEditar(consulta.id) } className = { styles.botaoEditar } > Editar </button></Link></td>
                             

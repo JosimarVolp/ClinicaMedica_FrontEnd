@@ -34,7 +34,7 @@ function Login() {
 
     const [ clientes, setClientes ] = useState( [] );
 
-    const [ cadastrado, setCadastrado ] = useState(1);
+    const [ cadastrado, setCadastrado ] = useState(0);
 
     useEffect(() => {        
 
@@ -57,6 +57,8 @@ function Login() {
 
     useEffect(() => {
 
+        if(dadosDeLogin.cpf !== "") {
+        
         setCadastrado(1);
         
 
@@ -67,12 +69,13 @@ function Login() {
             
             if(item.cpf == dadosDeLogin.cpf ) {
 
-                setCadastrado(0);
+                setCadastrado(2);
                 console.log("São iguais");
                 
                 
             } 
         });
+        }
 
     },[clientes]);
     
@@ -83,6 +86,10 @@ function Login() {
         if(cadastrado === 1) {
 
             alert("CPF não cadastrado");
+        } else if( cadastrado === 0) {
+
+            alert("Campos obrigatórios não preenchidos");
+
         } else {
 
             axios.get(`https://clinicamedica-backend.herokuapp.com/api/gerenciar_logins/${dadosDeLogin.cpf}`)
@@ -153,7 +160,7 @@ function Login() {
                 <button type= "button" onClick = { matchLogin } > Entrar </button>
                 </form>
 
-                <span> Não tem Login? <Link to = '/cadastrar_login'>Cadastre-se</Link></span>
+                <div className = {styles.container}><span className = {styles.span01} > Não tem Login? </span>  <span className = {styles.span02}> <Link to = '/cadastrar_login'>Cadastre-se</Link></span></div>
 
             </section>
 
