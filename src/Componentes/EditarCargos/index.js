@@ -49,6 +49,7 @@ const EditarCargos = ( props ) => {
         .then( ( res ) => {
 
             alert("Cargo atualizado com sucesso");
+            navigate('/gerenciar_cargos');
         });
     }
 

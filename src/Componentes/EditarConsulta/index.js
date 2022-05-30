@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useContext } from "react";
 
 import { useNavigate } from "react-router-dom";
 
@@ -8,10 +8,15 @@ import TituloDaPagina from "../TituloDaPagina";
 
 import styles from "./styles.module.css";
 
+import { contextUsuarioConectado } from '../../App';
+
+
 function EditarConsulta( props ) {
 
     //Título que será mostrado na "Barra de"
-    const tituloDaPagina = "Editar Consultas";   
+    const tituloDaPagina = "Editar Consultas";  
+    
+    const { usuarioConectado } = useContext(contextUsuarioConectado);
 
     const navigate = useNavigate();
 
@@ -114,7 +119,7 @@ function EditarConsulta( props ) {
 
     useEffect( ( ) => {
 
-        if(consultaAgendada.medico !== ""){
+        if((consultaAgendada.medico !== "") && (consultaAgendada.medico !== undefined)) {
 
         //console.log("Teste");
 
@@ -224,6 +229,38 @@ function EditarConsulta( props ) {
 
     };
 
+    const [medicamentos, setMedicamentos] = useState([]);
+
+    const dadosIniciais = {
+
+        id_consulta: 254,
+        id_medicamento: 0
+
+    }
+
+    const [ medicamentosReceitados, setMedicamentosReceitados ] = useState(dadosIniciais);
+
+    useEffect( () => {
+
+        axios.get('https://clinicamedica-backend.herokuapp.com/api/gerenciar_medicamentos')
+        
+        .then( (res) => {
+
+            const medicamentosTemp = res.data;
+            setMedicamentos( medicamentosTemp );
+        });
+
+    }, []);
+
+    function onChangeMedicamentos( ev ) {
+
+        const { name, value } = ev.target;        
+        setMedicamentosReceitados( { ...medicamentosReceitados, [name]: value } );
+
+    };
+
+    
+
     function onSubmit( ev ) {
 
         ev.preventDefault();
@@ -236,15 +273,25 @@ function EditarConsulta( props ) {
         console.log("Valor" +consultaAgendada.valor);
         console.log("Diagnóstico" +consultaAgendada.diagnostico);
 
-        axios.put('https://clinicamedica-backend.herokuapp.com/api/gerenciar_consultas', consultaAgendada)
-
-
-        
+        axios.put('https://clinicamedica-backend.herokuapp.com/api/gerenciar_consultas', consultaAgendada)        
         .then( (response) => {
 
             alert("Consulta alterada com sucesso!!!");
             navigate("/gerenciar_consultas_agendadas")
+            
         });
+
+        if(usuarioConectado.perfil === "medico") {
+
+            axios.post('https://clinicamedica-backend.herokuapp.com/api/gerenciar_consultaMedicamentos', medicamentosReceitados)        
+            .then( (response) => {
+
+                navigate("/gerenciar_consultas_agendadas")
+
+            });
+        }
+
+        
     }
 
 
@@ -265,7 +312,12 @@ function EditarConsulta( props ) {
             });
         
     }
+
     
+
+    
+
+    if(usuarioConectado.perfil === "medico") {
 
     return (
 
@@ -327,14 +379,14 @@ function EditarConsulta( props ) {
                 <div className = { styles.formGroup } >
 
                     <label htmlFor = "data"> Data </label>                    
-                    <input type = "date" id = "data" name = "data" onChange = { onChange } required />
+                    <input type = "date" id = "data" name = "data" onChange = { onChange } defaultValue = { consultaAgendada.data } required/>
 
                 </div>
 
                 <div className = { styles.formGroup } >
 
                     <label htmlFor = "hora" > Hora </label>
-                    <select id = "hora" name = "hora" onChange = { onChange } required >
+                    <select id = "hora" name = "hora" onChange = { onChange } value = { consultaAgendada.hora } required >
 
                         <option> </option>
                         { horariosDisponiveis.map( ( hora ) => (
@@ -352,6 +404,45 @@ function EditarConsulta( props ) {
                     <label htmlFor = "valor" > Valor </label>
                     <input type = "text" id = "valor" name = "valor" defaultValue = { consultaAgendada.valor } disabled = {true} required />
 
+                </div>                
+
+                <div className = { styles.formGroup } >
+                
+                    <label htmlFor = "diagnostico"> Diagnóstico </label>
+                    <textarea id = "diagnostico" name = "diagnostico" cols = "100%" rows = "20" defaultValue = { consultaAgendada.diagnotico } onChange = { onChange } >
+                    
+                    </textarea>
+
+                </div>
+
+                <div className = { styles.formGroup } >
+
+                    <label htmlFor = "id_medicamento" > Medicamento Receitado </label>
+                    <select id = "id_medicamento" name = "id_medicamento" onChange = { onChangeMedicamentos } >
+
+                        <option> Selecione... </option> 
+
+                        { medicamentos.map( ( medicamento ) => (
+
+                            <option key = { medicamento.id } value = { medicamento.id }> { medicamento.nome } </option>
+
+                        ) )}                       
+
+                    </select>
+
+                </div>
+
+                <div className = { styles.formGroup } >
+
+                    <label htmlFor = "status"> Status </label>
+                    <select id = "status" name = "status" value = { consultaAgendada.status } onChange = { onChange } required >
+
+                        <option> Selecione... </option>
+                        <option value = "agendada"> Agendada </option>
+                        <option value = "realizada"> Realizada </option>
+
+                    </select>
+
                 </div>
 
                 <div className = { styles.caixaDeBotoes }>
@@ -367,6 +458,109 @@ function EditarConsulta( props ) {
         </>
 
     );
+    } else {
+
+        return (
+
+            <>
+    
+                <TituloDaPagina tituloDaPagina = { tituloDaPagina } />      
+    
+                <form className = { styles.formulario } onSubmit = { onSubmit } >
+    
+                    <div className = { styles.formGroup } >
+    
+                        <label htmlFor = "especialidade"> Especialidade </label>
+                        <select id = "especialidade" name = "especialidade" value = { consultaAgendada.especialidade } onChange = { onChange } disabled required > 
+    
+                            <option> Selecione... </option>
+                            { especialidades.map( ( especialidade ) => (
+    
+                                <option key = { especialidade.id } value = { especialidade.id }> { especialidade.nome } </option>
+    
+                            ) )}
+    
+                        </select>
+    
+                    </div>
+    
+                    <div className = { styles.formGroup } >
+    
+                        <label htmlFor = "medico"> Médico </label>
+                        <select id = "medico" name = "medico" value = { consultaAgendada.medico } onChange = { onChange } disabled required >
+                        
+                            <option> Selecione... </option>
+                            {medicos.map( (medico) => (
+                                
+                                <option key = { medico.cpf } value = { medico.cpf } > { medico.nome } </option>
+                            
+                            ))}                    
+    
+                        </select>
+    
+                    </div>
+    
+                    <div className = { styles.formGroup } >
+    
+                        <label htmlFor = "paciente"> Paciente </label>
+                        <select id = "paciente" name = "paciente" value = { consultaAgendada.paciente } onChange = { onChange } disabled required >
+    
+                            {pacientes.map( (paciente) => (
+                                
+                                <option key = { paciente.cpf } value = { paciente.cpf } > { paciente.nome}  </option>
+                            
+                            ))}
+    
+                                
+    
+                        </select>
+    
+                    </div>
+    
+                    <div className = { styles.formGroup } >
+    
+                        <label htmlFor = "data"> Data </label>                    
+                        <input type = "date" id = "data" name = "data" onChange = { onChange } required />
+    
+                    </div>
+    
+                    <div className = { styles.formGroup } >
+    
+                        <label htmlFor = "hora" > Hora </label>
+                        <select id = "hora" name = "hora" onChange = { onChange } required >
+    
+                            <option> </option>
+                            { horariosDisponiveis.map( ( hora ) => (
+    
+                                <option key = { hora } value = { hora }>{ hora }</option>
+    
+                            ))}
+    
+                        </select>
+    
+                    </div>
+    
+                    <div className = { styles.formGroup } >
+    
+                        <label htmlFor = "valor" > Valor </label>
+                        <input type = "text" id = "valor" name = "valor" defaultValue = { consultaAgendada.valor } disabled = {true} required />
+    
+                    </div>
+    
+                    <div className = { styles.caixaDeBotoes }>
+    
+                        <button type = "submit" className = { styles.botaoCadastrar } > Salvar </button>
+                        <button type = "button"  onClick = { voltaAoGerenciador } className = { styles.botaoVoltar } > Voltar </button>
+                        <button type = "button"  onClick = { cancelaAgendamento } className = { styles.botaoCancelar } > Desmarcar </button>
+    
+                    </div>
+    
+                </form>
+    
+            </>
+    
+        );    
+    }
 
 };
 

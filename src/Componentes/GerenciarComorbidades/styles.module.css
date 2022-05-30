@@ -62,3 +62,33 @@ tfoot td{
     background-color: #EA1111;
     color: #fff;
 }
+
+.caixaDeBotoes {
+
+    width: 80%;
+    margin: 30px auto;    
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    flex-wrap: wrap;
+}
+
+.botaoCadastrar {
+
+    width: 25%;
+    
+    padding: 5px;
+    margin: 0 20px 90px 0;
+    background-color: #EA1111;
+    color: #fff;
+}
+
+.botaoVoltar {
+
+    width: 25%;
+    
+    padding: 5px;
+    margin: 0 0 90px 20px;
+    background-color: #EA1111;
+    color: #fff;
+}

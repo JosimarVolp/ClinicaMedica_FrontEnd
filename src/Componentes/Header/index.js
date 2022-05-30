@@ -36,13 +36,13 @@ function Header() {
                         <NavLink className = { styles.link } to = "/"> Home </NavLink>
                     </li>
                     <li> 
-                        Especialidades
+                        <NavLink className = { styles.link } to = "/especialidades"> Especialidades </NavLink>
                     </li>
                     <li> 
-                        Especialistas
+                        <NavLink className = { styles.link } to = "/especialistas"> Especialistas </NavLink>
                     </li>
                     <li> 
-                        Exames e Procedimentos
+                    <NavLink className = { styles.link } to = "/exames_e_procedimentos"> Exames e Procedimentos </NavLink>
                     </li>
                     <li> 
                         <NavLink className = { styles.link } to = "/agendamento"> Agendamento </NavLink>

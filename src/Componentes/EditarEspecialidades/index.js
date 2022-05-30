@@ -41,16 +41,48 @@ const EditarEspecialidades = ( props ) => {
         setDadosDaEspecialidade( { ...dadosDaEspecialidade, [name]: value } );
     };
 
-    function onSubmit(ev) {
+    const [ imagem, setImagem] = useState("");
+
+    function onChangeFile(ev) {
+
+        const { name, value } = ev.target;          
+
+        setDadosDaEspecialidade( { ...dadosDaEspecialidade, [name]: value } ); 
+
+        setImagem(ev.target.files[0]);
+
+        
+    };
+
+    async function onSubmit(ev) {
+
+        
 
         ev.preventDefault();
 
-        axios.put( 'https://clinicamedica-backend.herokuapp.com/api/gerenciar_especialidades', dadosDaEspecialidade )
+        const formData = new FormData();
+        formData.append('imagem', imagem);
+
+        const headers = {
+
+            "headers": {
+                "Content-Type": "application/json",
+            }
+        }
+
+        await axios.put( 'https://clinicamedica-backend.herokuapp.com/api/gerenciar_especialidades', dadosDaEspecialidade )
         
             .then( (response) => {                
                 
-                alert("Especialidade atualizada com sucesso!!");                         
+                //alert("Especialidade atualizada com sucesso!!");                         
                
+            });
+        
+        await axios.post( 'https://clinicamedica-backend.herokuapp.com/api/upload_image', formData, headers )
+            .then( (response) => {
+    
+                alert("Especialidade atualizada com sucesso!!");
+                navigate('/gerenciar_especialidades');
             });
             
     }; 
@@ -94,7 +126,7 @@ const EditarEspecialidades = ( props ) => {
                 <div className = { styles.formGroup } >
 
                     <label htmlFor = "imagem"> Imagem </label>
-                    <input type = "text" id = "imagem" name = "imagem" defaultValue = { dadosDaEspecialidade.imagem || ''}  onChange = { onChange } />
+                    <input type = "file" id = "imagem" name = "imagem" defaultValue = { dadosDaEspecialidade.imagem }  onChange = { onChangeFile } />
 
                 </div>
 

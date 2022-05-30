@@ -14,7 +14,7 @@ function Card( props ) {
 
                 <Link className={styles.link} to = { props.dadosDoCard.link }>
 
-                <img src= { props.dadosDoCard.imagem } alt= { props.dadosDoCard.altImagem }></img>
+                <img src = { props.dadosDoCard.imagem } alt= { props.dadosDoCard.altImagem }></img>
 
                 </Link>
                 <Link className={styles.link} to = { props.dadosDoCard.link }>

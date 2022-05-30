@@ -9,12 +9,22 @@ import "./app.css";
 import { BrowserRouter as Router } from "react-router-dom";
 import { Routes, Route } from "react-router-dom";
 
+
 import Especialidades from "./Componentes/Especialidades";
+import DescricaoEspecialidade from "./Componentes/DescricaoEspecialidade";
 import Especialistas from "./Componentes/Especialistas";
+import DescricaoEspecialista from "./Componentes/DescricaoEspecialista";
 import Exames from "./Componentes/Exames";
+import DescricaoExame from "./Componentes/DescricaoExame";
+import Resultados from "./Componentes/Resultados";
 import Agendamento from "./Componentes/Agendamento";
 import NotFound from "./Componentes/NotFound";
 import CadastrarLogin from "./Componentes/CadastrarLogin"
+import Relatorios from "./Componentes/Relatorios";
+
+import SobreNos from "./Componentes/SobreNos"; 
+import Contato from "./Componentes/Contato"; 
+import Localizacao from "./Componentes/Localizacao";
 
 import Botao from "./Componentes/Botao";
 import Footer from "./Componentes/Footer"
@@ -25,9 +35,12 @@ import AgendarExames from "./Componentes/AgendarExames";
 import Login from "./Componentes/Login";
 
 import HomeRestrita from "./Componentes/HomeRestrita";
-//import HomeMedicos from "./Componentes/HomeMedicos";
-//import HomeClientes from "./Componentes/HomeClientes";
-//import HomeExaminadores from "./Componentes/HomeExaminadores";
+
+import GerenciarProntuarios from "./Componentes/GerenciarProntuarios";
+import CadastrarProntuarios from "./Componentes/CadastrarProntuarios";
+import EditarProntuarios from "./Componentes/EditarProntuarios";
+import Prontuarios from "./Componentes/Prontuarios";
+
 
 import GerenciarClientes from "./Componentes/GerenciarClientes";
 import GerenciarExamesAgendados from "./Componentes/GerenciarExamesAgendados"
@@ -57,6 +70,9 @@ import EditarExames from "./Componentes/EditarExames";
 import EditarConvenios from "./Componentes/EditarConvenios";
 import EditarClientes from "./Componentes/EditarClientes";
 import EditarFuncionarios from "./Componentes/EditarFuncionarios";
+import EditarComorbidades from "./Componentes/EditarComorbidades";
+import EditarMedicamentos from "./Componentes/EditarMedicamentos";
+
 
 export const idEdicao = createContext({});
 
@@ -79,6 +95,18 @@ export const contextUsuarioConectado = createContext({});
 export const contextBotaoCadastrar = createContext({});
 
 export const contextBotaoLogin = createContext({});
+
+export const contextEspecialidadeSelecionada = createContext({});
+
+export const contextEspecialistaSelecionado = createContext({});
+
+export const contextExameSelecionado = createContext({});
+
+export const contextMedicamentoSelecionado = createContext({});
+
+export const contextComorbidadeSelecionada = createContext({});
+
+export const contextProntuarioSelecionado = createContext({});
 
 export default function App() {
 
@@ -152,8 +180,29 @@ export default function App() {
 
   const [ idDoExameParaEditar, setIdDoExameParaEditar ] = useState(0);
 
-  
+  const [ idEspecialidadeSelecionada, setIdEspecialidadeSelecionada] = useState(0);
 
+  const [ especialidadeSelecionada, setEspecialidadeSelecionada ] = useState({});
+
+  const [ idEspecialistaSelecionado, setIdEspecialistaSelecionado] = useState("aaaa");
+
+  const [ especialistaSelecionado, setEspecialistaSelecionado ] = useState({});
+
+  const [ idExameSelecionado, setIdExameSelecionado] = useState(0);
+
+  const [ exameSelecionado, setExameSelecionado ] = useState({});
+
+  const [ idMedicamentoSelecionado, setIdMedicamentoSelecionado] = useState(0);
+
+  const [ medicamentoSelecionado, setMedicamentoSelecionado ] = useState({});
+
+  const [ idComorbidadeSelecionada, setIdComorbidadeSelecionada] = useState(0);
+
+  const [ comorbidadeSelecionada, setComorbidadeSelecionada ] = useState({});
+
+  const [ cpfDoProntuarioSelecionado, setCpfDoProntuarioSelecionado] = useState("");
+
+  
   //Captura o valor da especialidade a ser editada
   useEffect(() => {
 
@@ -172,6 +221,60 @@ export default function App() {
     }
 
   }, [valorID]);
+
+  //Captura o valor da especialidade a ser editada
+  useEffect(() => {
+
+    
+
+    if(idEspecialidadeSelecionada !== 0) {
+
+      axios.get(`https://clinicamedica-backend.herokuapp.com/api/gerenciar_especialidades/${idEspecialidadeSelecionada}`)
+        
+        .then( res => {
+
+          const especialidadeTemp = res.data;
+          setEspecialidadeSelecionada(  especialidadeTemp  );
+
+        } ); 
+    }
+
+  }, [idEspecialidadeSelecionada]);
+
+  useEffect(() => {
+
+    
+
+    if(idExameSelecionado !== 0) {
+
+      axios.get(`https://clinicamedica-backend.herokuapp.com/api/gerenciar_exames_e_procedimentos/${idExameSelecionado}`)
+        
+        .then( res => {
+
+          const exameTemp = res.data;
+          setExameSelecionado(  exameTemp  );
+
+        } ); 
+    }
+
+  }, [idExameSelecionado]);
+
+  //Captura o valor da especialidade a ser editada
+  useEffect(() => {
+
+    if(idEspecialistaSelecionado !== 0) {
+
+      axios.get(`https://clinicamedica-backend.herokuapp.com/api/gerenciar_medicos/${idEspecialistaSelecionado}`)
+        
+        .then( res => {
+
+          const especialistaTemp = res.data;
+          setEspecialistaSelecionado(  especialistaTemp  );
+
+        } ); 
+    }
+
+  }, [idEspecialistaSelecionado]);
 
   //Captura o valor do cargo a ser editado
   useEffect(() => {
@@ -311,6 +414,42 @@ export default function App() {
 
   }, [cpfDoFuncionarioParaEditar]);
 
+  //captura os dados da comorbidade a ser editada
+
+  useEffect(() => {
+
+    if(idComorbidadeSelecionada !== 0) {
+
+      axios.get(`https://clinicamedica-backend.herokuapp.com/api/gerenciar_comorbidades/${idComorbidadeSelecionada}`)
+        
+        .then( res => {
+
+          const comorbidadeSelecionadaTemp = res.data;
+          setComorbidadeSelecionada(  comorbidadeSelecionadaTemp  );
+
+        } ); 
+    }
+
+  }, [idComorbidadeSelecionada]);
+
+  //captura os dados do medicamento a ser editado
+
+  useEffect(() => {
+
+    if(idMedicamentoSelecionado !== 0) {
+
+      axios.get(`https://clinicamedica-backend.herokuapp.com/api/gerenciar_medicamentos/${idMedicamentoSelecionado}`)
+        
+        .then( res => {
+
+          const medicamentoSelecionadoTemp = res.data;
+          setMedicamentoSelecionado(  medicamentoSelecionadoTemp  );
+
+        } ); 
+    }
+
+  }, [idMedicamentoSelecionado]);
+
   //Busca todos os exames 
 
   useEffect(() => {
@@ -378,6 +517,13 @@ export default function App() {
          <contextExamesAgendados.Provider value = { { idDoExameAgendadoParaEditar, setIdDoExameAgendadoParaEditar } }>
          <contextClientes.Provider value = { { cpfDoClienteParaEditar, setCpfDoClienteParaEditar } }>
          <contextFuncionarios.Provider value = { { cpfDoFuncionarioParaEditar, setCpfDoFuncionarioParaEditar } }>
+         <contextEspecialidadeSelecionada.Provider value = { { idEspecialidadeSelecionada, setIdEspecialidadeSelecionada } }>
+         <contextEspecialistaSelecionado.Provider value = { { idEspecialistaSelecionado, setIdEspecialistaSelecionado } }>
+         <contextExameSelecionado.Provider value = { { idExameSelecionado, setIdExameSelecionado } }>
+         <contextComorbidadeSelecionada.Provider value = { { idComorbidadeSelecionada, setIdComorbidadeSelecionada } }>
+         <contextMedicamentoSelecionado.Provider value = { { idMedicamentoSelecionado, setIdMedicamentoSelecionado } }>
+         <contextProntuarioSelecionado.Provider value = { { cpfDoProntuarioSelecionado, setCpfDoProntuarioSelecionado } }>
+
 
          <div className = "containerSuperior">
                
@@ -386,7 +532,7 @@ export default function App() {
                    
         </div>
      
-        <Header /> 
+        <Header />          
 
         
           
@@ -394,12 +540,32 @@ export default function App() {
 
               <Route exact path = "/" element = { <Home /> } />
               <Route exact path = "/especialidades" element = { <Especialidades /> } />
+              <Route exact path = { `/especialidades/${idEspecialidadeSelecionada}`} element = { <DescricaoEspecialidade especialidade = { especialidadeSelecionada } /> } />
+              
               <Route exact path = "/especialistas" element = { <Especialistas /> } />
+              <Route exact path = { `/especialistas/${idEspecialistaSelecionado}`} element = { <DescricaoEspecialista  especialista = { especialistaSelecionado }/> } />
+              
+              
               <Route exact path = "/exames_e_procedimentos" element = { <Exames /> } />
+              <Route exact path = { `/exames_e_procedimentos/${idExameSelecionado}`} element = { <DescricaoExame exame = { exameSelecionado } /> } />
+              <Route exact path = "/resultados" element = { <Resultados /> } />
               <Route exact path = "/agendamento" element = { <Agendamento /> } />
               <Route exact path = "/cadastrar_login" element = { <CadastrarLogin /> } />
               <Route exact path = "/login" element = { <Login /> } />
               <Route exact path = "/area_restrita" element = { <HomeRestrita /> } />
+
+              <Route exact path = "/sobre_nos" element = { <SobreNos /> } />
+              <Route exact path = "/contato" element = { <Contato /> } />
+              <Route exact path = "/localizacao" element = { <Localizacao /> } />
+
+              <Route exact path = "/relatorios" element = { <Relatorios /> } />
+
+              <Route exact path = "/gerenciar_prontuarios" element = { <GerenciarProntuarios /> } />
+              <Route exact path = "/gerenciar_prontuarios/cadastrar" element = { <CadastrarProntuarios /> } />
+              <Route exact path = { `/gerenciar_prontuarios/editar/${cpfDoProntuarioSelecionado}`} element = { <EditarProntuarios cpf = { cpfDoProntuarioSelecionado } /> } />
+              <Route exact path = { `/prontuarios/${cpfDoProntuarioSelecionado}`} element = { <Prontuarios cpf = { cpfDoProntuarioSelecionado } /> } />
+
+              
               
           
               
@@ -436,22 +602,32 @@ export default function App() {
 
               <Route exact path = "/gerenciar_funcionarios" element = { <GerenciarFuncionarios /> } />
               <Route exact path = "/gerenciar_funcionarios/cadastrar" element = { <CadastrarFuncionarios /> } />
-              <Route exact path = { `/gerenciar_funcionarios/editar/${cpfDoFuncionarioParaEditar}` } element = { <EditarFuncionarios funcionario = { funcionarioParaEditar } /> } />
+              <Route exact path = { `/gerenciar_funcionarios/editar/${cpfDoFuncionarioParaEditar}` } element = { <EditarFuncionarios cpf = { cpfDoFuncionarioParaEditar } /> } />
               
               
               <Route exact path = "/gerenciar_resultados" element = { <GerenciarResultados /> } />
               <Route exact path = "/gerenciar_comorbidades" element = { <GerenciarComorbidades /> } />
               <Route exact path = "/gerenciar_comorbidades/cadastrar" element = { <CadastrarComorbidades /> } />
+              <Route exact path = { `/gerenciar_comorbidades/editar/${idComorbidadeSelecionada}`} element = { <EditarComorbidades comorbidade = { comorbidadeSelecionada } /> } />
+              
+
               <Route exact path = "/gerenciar_medicamentos" element = { <GerenciarMedicamentos /> } />
               <Route exact path = "/gerenciar_medicamentos/cadastrar" element = { <CadastrarMedicamentos /> } />
+              <Route exact path = {`/gerenciar_medicamentos/editar/${idMedicamentoSelecionado}`} element = { <EditarMedicamentos medicamento = { medicamentoSelecionado } /> } />
               <Route component = { NotFound } />
 
               
 
           </Routes>
 
-      
+          <Footer  dados = { especialidades }/>      
 
+          </contextProntuarioSelecionado.Provider> 
+          </contextMedicamentoSelecionado.Provider>   
+          </contextComorbidadeSelecionada.Provider>        
+          </contextExameSelecionado.Provider>
+          </contextEspecialistaSelecionado.Provider>
+          </contextEspecialidadeSelecionada.Provider>
           </contextFuncionarios.Provider>
           </contextClientes.Provider>
           </contextExamesAgendados.Provider>  
@@ -465,7 +641,6 @@ export default function App() {
           </contextUsuarioConectado.Provider>
           
                   
-        <Footer  dados = { especialidades }/>      
       </>
     </Router>      
   );

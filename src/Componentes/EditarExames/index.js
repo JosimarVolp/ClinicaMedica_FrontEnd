@@ -16,6 +16,8 @@ const EditarExames = ( props ) => {
 
     const [ dadosDoExame, setDadosDoExame ] = useState( {} );
 
+    const [ imagem, setImagem] = useState("");
+
     useEffect( ( ) => { 
 
         setDadosDoExame(props.exame);
@@ -41,16 +43,45 @@ const EditarExames = ( props ) => {
         setDadosDoExame( { ...dadosDoExame, [name]: value } );
     }
 
-    function onSubmit( ev ) {
+    function onChangeFile(ev) {
+
+        const { name, value } = ev.target;          
+
+        setDadosDoExame( { ...dadosDoExame, [name]: value } ); 
+
+        setImagem(ev.target.files[0]);
+
+        
+    };
+
+    async function onSubmit( ev ) {
 
         ev.preventDefault();
 
-        axios.put('https://clinicamedica-backend.herokuapp.com/api/gerenciar_exames_e_procedimentos', dadosDoExame)
+        const formData = new FormData();
+        formData.append('imagem', imagem);
+
+        const headers = {
+
+            "headers": {
+                "Content-Type": "application/json",
+            }
+        }
+
+        await axios.put('https://clinicamedica-backend.herokuapp.com/api/gerenciar_exames_e_procedimentos', dadosDoExame)
         
         .then( ( res ) => {
 
-            alert("Exame atualizado com sucesso");
+            //alert("Exame atualizado com sucesso");
         });
+
+        await axios.post( 'https://clinicamedica-backend.herokuapp.com/api/upload_image', formData, headers )
+            .then( ( response ) => {
+                    
+                alert("Exame atualizado com sucesso!!")
+                navigate('/gerenciar_exames_e_procedimentos');
+                
+            });
     }
 
     function retornaAoGerenciador() {
@@ -101,7 +132,7 @@ const EditarExames = ( props ) => {
                 <div className = { styles.formGroup }>
 
                     <label htmlFor = "imagem" > Imagem </label>
-                    <input type = "text" alt = "Imagem do Exame" id = "imagem" name = "imagem" defaultValue = { dadosDoExame.imagem || '' } onChange = { onChange } />
+                    <input type = "file" alt = "Imagem do Exame" id = "imagem" name = "imagem" onChange = { onChangeFile } />
 
                 </div>
 

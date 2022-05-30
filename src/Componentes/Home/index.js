@@ -60,8 +60,14 @@ function Home() {
             imagem: "imagens/resultados.png",
             altImagem: "Resultados de Exames",
             titulo: "Resultados",
-            link: "/exames_e_procedimentos"
-        }    
+            link: "/resultados"
+        },
+        {
+            imagem: "imagens/resultados.png",
+            altImagem: "Resultados de Exames",
+            titulo: "Resultados",
+            link: "/login"
+        }       
     ];
 
              
@@ -114,7 +120,7 @@ function Home() {
                     <div className = { styles.areaInferior }>
                         <Card dadosDoCard = { dadosDoCard[4] } />
                         <Card dadosDoCard = { dadosDoCard[5] } />
-                        <Card dadosDoCard = { dadosDoCard[6] } />                
+                        <Card dadosDoCard = { dadosDoCard[7] } />                
                     </div>
 
             </main> 

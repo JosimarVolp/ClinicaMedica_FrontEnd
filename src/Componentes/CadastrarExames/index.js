@@ -26,6 +26,8 @@ function CadastrarExames() {
     
     const [ dadosDoExame, setDadosDoExame ] = useState( dadosIniciaisDoExame );
 
+    const [ imagem, setImagem] = useState("");
+
     function onChange(ev) {
 
         const { name, value } = ev.target;
@@ -33,15 +35,44 @@ function CadastrarExames() {
         setDadosDoExame( { ...dadosDoExame, [name]: value } );
     }
 
-    function onSubmit(ev) {
+    function onChangeFile(ev) {
+
+        const { name, value } = ev.target;          
+
+        setDadosDoExame( { ...dadosDoExame, [name]: value } ); 
+
+        setImagem(ev.target.files[0]);
+
+        
+    };
+
+    async function onSubmit(ev) {
 
         ev.preventDefault();
-        
-        axios.post( 'https://clinicamedica-backend.herokuapp.com/api/gerenciar_exames_e_procedimentos', dadosDoExame )
-            .then( ( response ) => {
 
-                //s etCliente({ idCliente: response.cliente.id, idEndereco: respond }) 
+        const formData = new FormData();
+        formData.append('imagem', imagem);
+
+        const headers = {
+
+            "headers": {
+                "Content-Type": "application/json",
+            }
+        }
+        
+        await axios.post( 'https://clinicamedica-backend.herokuapp.com/api/gerenciar_exames_e_procedimentos', dadosDoExame )
+            .then( ( response ) => {
+                
+                //alert("Exame cadastrado com sucesso!!")
+
+            });
+
+        await axios.post( 'https://clinicamedica-backend.herokuapp.com/api/upload_image', formData, headers )
+            .then( ( response ) => {
+                    
                 alert("Exame cadastrado com sucesso!!")
+                navigate('/gerenciar_exames_e_procedimentos');
+                
             });
     }
 
@@ -77,7 +108,7 @@ function CadastrarExames() {
                 <div className = { styles.formGroup }>
 
                     <label htmlFor = "valor" > Valor </label>
-                    <input type = "number" id = "valor" name = "valor" onChange = { onChange } />
+                    <input type = "text" id = "valor" name = "valor" onChange = { onChange } />
 
                 </div>
 
@@ -93,7 +124,7 @@ function CadastrarExames() {
                 <div className = { styles.formGroup }>
 
                     <label htmlFor = "imagem" > Imagem </label>
-                    <input type = "text" alt = "Imagem do Exame" id = "imagem" name = "imagem" onChange = { onChange }/>
+                    <input type = "file" alt = "Imagem do Exame" id = "imagem" name = "imagem" onChange = { onChangeFile } required />
 
                 </div>
 

@@ -1,7 +1,11 @@
 import React, { useState, useEffect } from 'react';
 
 import axios from 'axios';
-import MenuRodape from '../MenuRodape';
+import MenuEspecialidades from '../MenuEspecialidades';
+import MenuEspecialistas from '../MenuEspecialistas';
+import MenuExames from '../MenuExames';
+import MenuSobreNos from '../MenuSobreNos';
+
 import styles from './styles.module.css';
 
 function Footer( props ) {
@@ -14,8 +18,8 @@ function Footer( props ) {
         
         .then( ( res )=>{
 
-            let especialidades = res.data;            
-            setEspecialidades(especialidades);
+            let especialidadesTemp = res.data;            
+            setEspecialidades(especialidadesTemp);
 
         });
 
@@ -49,27 +53,7 @@ function Footer( props ) {
 
         });
 
-    },[]);
-
-    
-
-    const sobreNos = [ 
-        
-        {
-            "id": 1,
-            "nome": "Sobre Nós"
-        }, 
-        {
-            "id": 2,
-            "nome": "Contato"
-        }, 
-        {
-            "id": 3,
-            "nome": "Localização"
-        }
-    ];
-
-    
+    },[]);   
 
     return (
 
@@ -77,16 +61,16 @@ function Footer( props ) {
 
             <div className = { styles.areaOcupada} >
                 <div className = { styles.bloco }>
-                    <MenuRodape tituloDoMenu = { "Especialidades" } itensDeMenu = { especialidades } />
+                    <MenuEspecialidades itensDeMenu = { especialidades } />
                 </div>
                 <div className = { styles.bloco }>
-                    <MenuRodape tituloDoMenu = { "Especialistas" } itensDeMenu = { especialistas }/>
+                    <MenuEspecialistas tituloDoMenu = { "Especialistas" } itensDeMenu = { especialistas }/>
                 </div>
                 <div className = { styles.bloco }>
-                    <MenuRodape tituloDoMenu = { "Exames e Procedimentos" } itensDeMenu = { exames }/>
+                    <MenuExames itensDeMenu = { exames }/>
                 </div>
                 <div className = { styles.bloco }>
-                    <MenuRodape tituloDoMenu = { "Conheça a Clínica" } itensDeMenu = { sobreNos }/>
+                    <MenuSobreNos />
                 </div>                
                 
             </div>

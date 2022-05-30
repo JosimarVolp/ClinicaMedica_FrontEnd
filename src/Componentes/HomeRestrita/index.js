@@ -49,7 +49,7 @@ function HomeRestrita() {
             imagem: "imagens/resultados.png",
             altImagem: "Resultados de Exames",
             titulo: "Resultados",
-            link: ""///gerenciar_resultados
+            link: "/resultados"
         },
         {
             imagem: "imagens/especialidades.jpg",
@@ -73,13 +73,25 @@ function HomeRestrita() {
             imagem: "imagens/comorbidades.png",
             altImagem: "Comorbidades",
             titulo: "Comorbidades",
-            link: ""///gerenciar_comorbidades
+            link: "/gerenciar_comorbidades"
         },
         {
             imagem: "imagens/medicamentos.jpg",
             altImagem: "Medicamentos",
             titulo: "Medicamentos",
-            link: "" ///gerenciar_medicamentos
+            link: "/gerenciar_medicamentos"
+        },
+        {
+            imagem: "imagens/relatorios.jpg",
+            altImagem: "Relatórios",
+            titulo: "Relatórios",
+            link: "/relatorios"
+        },  
+        {
+            imagem: "imagens/relatorios.jpg",
+            altImagem: "Prontuários",
+            titulo: "Prontuários",
+            link: "/gerenciar_prontuarios"
         }        
 
       ];
@@ -119,6 +131,7 @@ function HomeRestrita() {
                     <Card dadosDoCard = { dadosDoCard[5] } />
                     <Card dadosDoCard = { dadosDoCard[9] } />
                     <Card dadosDoCard = { dadosDoCard[10] } />
+                    <Card dadosDoCard = { dadosDoCard[12] } />
                     
                 </div>
             </>
@@ -148,6 +161,7 @@ function HomeRestrita() {
                     <Card dadosDoCard = { dadosDoCard[8] } />
                     <Card dadosDoCard = { dadosDoCard[9] } />
                     <Card dadosDoCard = { dadosDoCard[10] } />
+                    <Card dadosDoCard = { dadosDoCard[11] } />
                 </div>
             </>
         )

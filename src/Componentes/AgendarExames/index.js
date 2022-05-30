@@ -69,7 +69,8 @@ function AgendarExames() {
         cliente:"",
         data: "",
         hora: "",
-        valor: 0
+        valor: 0,
+        status: "agendado"
     }
 
     //Este estado guarda os dados preenchidos nos inputs para salvá-los no DB
@@ -138,15 +139,15 @@ function AgendarExames() {
         
             examesDB.map( ( exame ) => {           
 
-            if(exame.id == dadosDoExame.exame) {
+                if(exame.id == dadosDoExame.exame) {
 
-                valor = exame.valor;   
-                
-                setInputValor({...inputValor, valorDoExame: valor});
-                setDadosDoExame({...dadosDoExame, valor: valor});
-            }
+                    valor = exame.valor;   
+                    
+                    setInputValor({...inputValor, valorDoExame: valor});
+                    setDadosDoExame({...dadosDoExame, valor: valor});
+                }
 
-        } );   
+            } );   
             
         });
 
@@ -156,19 +157,19 @@ function AgendarExames() {
     //Este useEffect busca todas as consultas do DB de acordo com o médico selecionado, dessas consultas sairão os horário possíveis
     useEffect( ( ) => {
 
-        if(dadosDoExame.funcionario !== ""){
+        if((dadosDoExame.funcionario !== "") && (dadosDoExame.funcionario !== 0)){
 
-        //console.log("Teste");
+        
 
-        setSelectCliente({...selectCliente, desabilitado: false  })
+            setSelectCliente({...selectCliente, desabilitado: false  })
 
-        axios.get(`https://clinicamedica-backend.herokuapp.com/api/gerenciar_exames_e_procedimentos_agendados/funcionario/${dadosDoExame.funcionario}`)
-                
-        .then( ( res ) => {
+            axios.get(`https://clinicamedica-backend.herokuapp.com/api/gerenciar_exames_e_procedimentos_agendados/funcionario/${dadosDoExame.funcionario}`)
+                    
+            .then( ( res ) => {
 
-            let exames = res.data;
-            setExamesFuncionario( exames );
-        });
+                let exames = res.data;
+                setExamesFuncionario( exames );
+            });
     }
     
     }, [dadosDoExame.funcionario]);

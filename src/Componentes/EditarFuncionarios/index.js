@@ -13,113 +13,86 @@ function EditarFuncionarios( props ) {
 
     const navigate = useNavigate();
 
-    const dadosIniciaisDoFuncionario = {
+    const [ dadosDeLogin, setDadosDeLogin ] = useState({});
+    
+    const [ dadosDoFuncionario, setDadosDoFuncionario ] = useState({});
 
-        
-    }
-
-    const [ dadosDoFuncionario, setDadosDoFuncionario ] = useState(dadosIniciaisDoFuncionario);
-
-    useEffect(() => {
-
-        setDadosDoFuncionario(props.funcionario)
-
-    }, [props.funcionario]);    
-
-    useEffect(() => {
-
-        
-        setValor_padrao_exame_que_realiza(dadosDoFuncionario.exame_que_realiza)
-        console.log("Exames que Realiza: " +dadosDoFuncionario.exame_que_realiza);
-
-    }, [dadosDoFuncionario.exame_que_realiza])
-
-    const [ dadosDeLogin, setDadosDeLogin ] = useState( { } );
-
-    useEffect( ( ) => {
-
-        axios.get(`https://clinicamedica-backend.herokuapp.com/api/gerenciar_logins/${dadosDoFuncionario.cpf}`)
-        
-        .then( ( res ) => {
-
-            let dadosDeLogin = res.data;
-            setDadosDeLogin( dadosDeLogin );
-
-        });
-
-    }, [dadosDoFuncionario.cpf] );
-   
-    const dadosIniciaisDoMedico = {
-
-        cpf: "",
-        crm:"",
-        especialidade: 0,
-        biografia: "",
-        foto: ""
-    }
-
-    const [ dadosDoMedico, setDadosDoMedico ] = useState( dadosIniciaisDoMedico );
-
-    useEffect( () => {
-
-        if(dadosDoFuncionario.cargo == 1) {
-
-            axios.get(`https://clinicamedica-backend.herokuapp.com/api/gerenciar_medicos/${dadosDoFuncionario.cpf}`)
-            
-            .then( ( res ) => {
-
-                let dadosDoMedico = res.data;
-
-                setDadosDoMedico( dadosDoMedico );
-            });
-        }
-
-    }, [dadosDoFuncionario.cargo]);
-
-    useEffect( ( ) => {
-
-        console.log("CPF do Médico: " +dadosDoMedico.cpf);
-        console.log("CRM do Médico: " +dadosDoMedico.crm);
-        console.log("Especialidade do Médico: " +dadosDoMedico.especialidade);
-        
-
-    }, [dadosDoMedico] );
-
-    const [ cargoAtual, setCargoAtual ] = useState({});
-
-   /* useEffect(() => {
-
-        axios.get(`https://clinicamedica-backend.herokuapp.com/api/gerenciar_cargos/${dadosDoFuncionario.cargo}`)
-        
-        .then( (res) => {
-
-            let cargoAtual = res.data;
-            setCargoAtual(cargoAtual);
-        });
-
-    }, [dadosDoFuncionario.cargo]);*/
-
-    const [ dadosDoEndereco, setDadosDoEndereco ] = useState( {} );
-
-    useEffect( ( ) => {
-
-        if(dadosDoFuncionario.endereco !== undefined) {
-
-            axios.get(`https://clinicamedica-backend.herokuapp.com/api/gerenciar_enderecos/${dadosDoFuncionario.endereco}`)
-            
-            .then( ( res ) => {
-
-                let dadosDoEndereco = res.data;
-
-                setDadosDoEndereco( dadosDoEndereco);
-
-            });
-        }
-
-
-    }, [dadosDoFuncionario.endereco] );
+    const [ dadosDoMedico, setDadosDoMedico ] = useState({});
 
     const [ cargos, setCargos ] = useState( [] );
+
+    const [ exames, setExames ] = useState( [] );
+
+    const [ especialidades, setEspecialidades ] = useState( [] );
+
+    useEffect(() => {   
+
+            axios.get(`https://clinicamedica-backend.herokuapp.com/api/gerenciar_funcionarios/${props.cpf}`)
+            
+            .then( (res) => {
+
+                const dadosDoFuncionarioTemp = res.data;
+                setDadosDoFuncionario(  dadosDoFuncionarioTemp  );                
+    
+            } );  
+            
+            axios.get(`https://clinicamedica-backend.herokuapp.com/api/gerenciar_logins/${props.cpf}`)
+            
+            .then( (res) => {
+
+                const dadosDeLoginTemp = res.data;
+                setDadosDeLogin(  dadosDeLoginTemp  );                
+    
+            } );      
+
+      }, [props.cpf]);
+
+      useEffect(()=> {
+
+        if(dadosDoFuncionario.cargo === 1 ) {
+
+            axios.get(`https://clinicamedica-backend.herokuapp.com/api/gerenciar_medicos/${props.cpf}`)
+        
+            .then( (res) => {
+
+            const dadosDoMedicoTemp = res.data;
+            setDadosDoMedico(  dadosDoMedicoTemp  );                
+
+            }    ); 
+        }
+
+      },[dadosDoFuncionario.cargo])
+
+      useEffect(()=> {
+
+        console.log("Campos de Médicos" + dadosDoMedico.data_nascimento);
+        
+
+      },[dadosDoMedico.cpf])
+
+    useEffect(() => {
+
+        if((dadosDoFuncionario.cpf !== undefined) && (dadosDoFuncionario.cpf !== "")) {
+    
+            console.log("CPF Passado: " + dadosDoFuncionario.cpf); 
+            console.log("Nascimento: " + dadosDoFuncionario.data_nascimento); 
+            console.log("Nascimento: " + dadosDoFuncionario.data_admissao);
+            console.log("Nascimento: " + dadosDoFuncionario.data_demissao);
+            console.log("Cargo: " + dadosDoFuncionario.cargo);
+            console.log("Exame Que Realliza: " + dadosDoFuncionario.exame_que_realiza);
+            dadosDoFuncionario.data_nascimento = dadosDoFuncionario.data_nascimento.substring(0, 10);
+            dadosDoFuncionario.data_admissao = dadosDoFuncionario.data_admissao.substring(0, 10);
+            if((dadosDoFuncionario.data_demissao !== undefined) && (dadosDoFuncionario.data_demissao !== null)) {
+                dadosDoFuncionario.data_demissao = dadosDoFuncionario.data_demissao.substring(0, 10);
+            }
+            
+            setDadosDoFuncionario(dadosDoFuncionario);
+            
+           
+          
+        }
+    
+      }, [dadosDoFuncionario.cpf]);
 
     useEffect( ( ) => {
 
@@ -133,23 +106,19 @@ function EditarFuncionarios( props ) {
 
     }, []);
 
-    const [ especialidades, setEspecialidades ] = useState( [] );
-
     useEffect( ( ) => {
 
         axios.get('https://clinicamedica-backend.herokuapp.com/api/gerenciar_especialidades')
         
         .then( ( res ) => {
 
-            let especialidades = res.data;
-            setEspecialidades( especialidades );
+            let especialidadesTemp = res.data;
+            setEspecialidades( especialidadesTemp );
 
         });
 
     }, [] );
-
-    const [ exames, setExames ] = useState( [] );
-
+    
     useEffect( ( ) => {
 
         axios.get('https://clinicamedica-backend.herokuapp.com/api/gerenciar_exames_e_procedimentos')
@@ -163,59 +132,6 @@ function EditarFuncionarios( props ) {
 
     }, []);
 
-    const [ valor_padrao_exame_que_realiza, setValor_padrao_exame_que_realiza] = useState(0);
-
-    useEffect( () => {
-
-        if(dadosDoFuncionario.cargo == 1) {
-        
-            document.getElementById('crmDiv').style.display = 'flex';
-            document.getElementById('especialidadeDiv').style.display = 'flex';
-            document.getElementById('biografiaDiv').style.display = 'flex';
-            document.getElementById('fotoDiv').style.display = 'flex';
-            document.getElementById('exame_que_realizaDiv').style.display = 'flex';
-            setValor_padrao_exame_que_realiza(0);
-           
-
-        } else if(dadosDoFuncionario.cargo == 3) {
-
-            document.getElementById('crmDiv').style.display = 'none';
-            document.getElementById('especialidadeDiv').style.display = 'none';
-            document.getElementById('biografiaDiv').style.display = 'none';
-            document.getElementById('fotoDiv').style.display = 'none';
-            document.getElementById('exame_que_realizaDiv').style.display = 'flex';
-            
-        } else {
-
-            document.getElementById('crmDiv').style.display = 'none';
-            document.getElementById('especialidadeDiv').style.display = 'none';
-            document.getElementById('biografiaDiv').style.display = 'none';
-            document.getElementById('fotoDiv').style.display = 'none';
-            document.getElementById('exame_que_realizaDiv').style.display = 'none';
-
-        }
-
-
-    }, [dadosDoFuncionario.cargo]);    
-    
-    function carregaExames() {
-
-        if(dadosDoFuncionario.exame_que_realiza != null) {
-        
-            return <>
-        
-                
-
-                    {exames.map( ( item )=>(
-
-                        <option value={ item.id } key = { item.id } > { item.nome } </option>
-                    ))}
-
-                
-            </>
-        }
-    }
-    
     function onChangeLogin(ev) {
 
         const { name, value } = ev.target;        
@@ -237,20 +153,77 @@ function EditarFuncionarios( props ) {
         setDadosDoMedico( { ...dadosDoMedico, [name]: value } );
     };
 
-    function onChangeEndereco(ev) {
-
-        const { name, value } = ev.target;        
-
-        setDadosDoEndereco( { ...dadosDoEndereco, [name]: value } );
-    };
-
     function retornaAoGerenciador() {
 
         navigate('/gerenciar_funcionarios');
 
     }
 
+    useEffect( () => {
 
+        if(dadosDoFuncionario.cargo == 1) {
+        
+            document.getElementById('crmDiv').style.display = 'flex';
+            document.getElementById('especialidadeDiv').style.display = 'flex';
+            document.getElementById('biografiaDiv').style.display = 'flex';
+            document.getElementById('fotoDiv').style.display = 'flex';
+            document.getElementById('exame_que_realizaDiv').style.display = 'flex';
+            
+           
+
+        } else if(dadosDoFuncionario.cargo == 3) {
+
+            document.getElementById('crmDiv').style.display = 'none';
+            document.getElementById('especialidadeDiv').style.display = 'none';
+            document.getElementById('biografiaDiv').style.display = 'none';
+            document.getElementById('fotoDiv').style.display = 'none';
+            document.getElementById('exame_que_realizaDiv').style.display = 'flex';
+            
+        } else {
+
+            document.getElementById('crmDiv').style.display = 'none';
+            document.getElementById('especialidadeDiv').style.display = 'none';
+            document.getElementById('biografiaDiv').style.display = 'none';
+            document.getElementById('fotoDiv').style.display = 'none';
+            document.getElementById('exame_que_realizaDiv').style.display = 'none';
+
+        }
+
+
+    }, [dadosDoFuncionario.cargo]);  
+
+    async function onSubmit( ev ) {
+
+        ev.preventDefault();
+
+        await axios.put('https://clinicamedica-backend.herokuapp.com/api/gerenciar_logins', dadosDeLogin)
+        
+        .then( ( res ) => {
+
+            alert("Login atualizado com sucesso");
+            
+        });
+
+        await axios.put('https://clinicamedica-backend.herokuapp.com/api/gerenciar_funcionarios', dadosDoFuncionario)
+        
+        .then( ( res ) => {
+
+            alert("Funcionario atualizado com sucesso");
+            
+        });
+
+        await axios.put('https://clinicamedica-backend.herokuapp.com/api/gerenciar_medicos', dadosDoMedico)
+        
+        .then( ( res ) => {
+
+            alert("Medico atualizado com sucesso");
+            
+        });
+
+        //setCpfDoClienteParaEditar("");
+        navigate("/gerenciar_funcionarios")
+
+    }
     
 
     return (
@@ -259,7 +232,7 @@ function EditarFuncionarios( props ) {
 
             <TituloDaPagina tituloDaPagina = { tituloDaPagina } />
 
-            <form className = { styles.formulario } >
+            <form className = { styles.formulario } onSubmit = { onSubmit } >
 
                 <div className = { styles.formGroup } >
 
@@ -306,7 +279,9 @@ function EditarFuncionarios( props ) {
                 <div className = { styles.formGroup } >
 
                     <label htmlFor = "perfil" > Perfil </label>
-                    <select id = "perfil" name = "perfil" value = { dadosDeLogin.perfil} onChange = { onChangeLogin } >                
+                    <select id = "perfil" name = "perfil" value = { dadosDeLogin.perfil} onChange = { onChangeLogin } >  
+
+                    <option> Selecione... </option>              
 
                         <option value = "admin"> Administrador </option>
                         <option value = "cliente"> Cliente </option>
@@ -323,6 +298,7 @@ function EditarFuncionarios( props ) {
                     <label htmlFor = "status"> Status </label>
                     <select id = "status" name = "status" value = { dadosDeLogin.status } onChange = { onChangeLogin } >
 
+                        <option> Selecione... </option>
                         <option value = "ativo"> Ativo </option>
                         <option value = "inativo"> Inativo </option>
 
@@ -333,21 +309,21 @@ function EditarFuncionarios( props ) {
                 <div className = { styles.formGroup } >
 
                     <label htmlFor = "data_nascimento" > Data de Nascimento </label>
-                    <input type = "text" id = "data_nascimento" name = "data_nascimento"  defaultValue = { dadosDoFuncionario.data_nascimento } onChange = { onChangeFuncionario }/>
+                    <input type = "date" id = "data_nascimento" name = "data_nascimento"  defaultValue = { dadosDoFuncionario.data_nascimento } onChange = { onChangeFuncionario }/>
 
                 </div>
 
                 <div className = { styles.formGroup } >
 
                     <label htmlFor = "data_admissao"> Data de Admissão </label>
-                    <input type = "text" id = "data_admissao" name = "data_admissao" defaultValue = { dadosDoFuncionario.data_admissao} onChange = { onChangeFuncionario } />
+                    <input type = "date" id = "data_admissao" name = "data_admissao" defaultValue = { dadosDoFuncionario.data_admissao} onChange = { onChangeFuncionario } />
 
                 </div>
 
                 <div className = { styles.formGroup } >
 
                     <label htmlFor = "data_demissao"> Data de Demissão </label>
-                    <input type = "text" id = "data_demissao" name = "data_demissao" defaultValue = { dadosDoFuncionario.data_demissao } onChange = { onChangeFuncionario }/>
+                    <input type = "date" id = "data_demissao" name = "data_demissao" defaultValue = { dadosDoFuncionario.data_demissao } onChange = { onChangeFuncionario }/>
 
                 </div>
 
@@ -356,6 +332,7 @@ function EditarFuncionarios( props ) {
                     <label htmlFor = "cargo"> Cargo </label>
                     <select id = "cargo" name = "cargo" required value = { dadosDoFuncionario.cargo } onChange = { onChangeFuncionario } >
                         
+                        <option> Selecione... </option>
                         {cargos.map( ( item ) => (
                         <option value = { item.id } key = { item.id } > { item.nome } </option>
                         ))}
@@ -367,15 +344,16 @@ function EditarFuncionarios( props ) {
                 <div id = "crmDiv" className = { styles.formGroup01 }>
 
                     <label htmlFor = "crm" > CRM </label>
-                    <input type = "text" id = "crm" name = "crm"  />
+                    <input type = "text" id = "crm" name = "crm"  defaultValue = { dadosDoMedico.crm } onChange = { onChangeMedico } />
 
                 </div>
 
                 <div id = "especialidadeDiv" className = { styles.formGroup01 }>
 
                     <label htmlFor = "especialidade"> Especialidade </label>
-                    <select id = "especialidade" name = "especialidade"  > 
+                    <select id = "especialidade" name = "especialidade" value = { dadosDoMedico.especialidade } onChange = { onChangeMedico }> 
 
+                        <option> Selecione... </option>
                         {especialidades.map( ( item ) => (
 
                             <option value = { item.id } key = { item.id } > { item.nome } </option>
@@ -388,21 +366,24 @@ function EditarFuncionarios( props ) {
                 <div id = "biografiaDiv" className = { styles.formGroup01 } >
 
                     <label htmlFor = "biografia" > Biografia </label>
-                    <input type = "text" id = "biografia" name = "biografia" />
+                    <input type = "text" id = "biografia" name = "biografia" defaultValue = { dadosDoMedico.biografia } onChange = { onChangeMedico } />
 
                 </div>
 
                 <div id = "fotoDiv" className = { styles.formGroup01 }>
 
-                    <label htmlFor = "foto"> Foto </label>
-                    <input type = "text" id = "foto" name = "foto" />
+                    <label htmlFor = "imagem"> Foto </label>
+                    <input type = "file" id = "imagem" name = "imagem" defaultValue = { dadosDoMedico.imagem } onChange = { onChangeMedico } />
 
                 </div>
 
                 <div id = "exame_que_realizaDiv" className = { styles.formGroup01 } >
 
                     <label htmlFor = "exame_que_realiza" > Exame que Realiza </label>
-                    <select id = "exame_que_realiza" name = "exame_que_realiza" value = { valor_padrao_exame_que_realiza } onChange = { onChangeLogin}>
+                    <select id = "exame_que_realiza" name = "exame_que_realiza" value = { dadosDoFuncionario.exame_que_realiza } onChange = { onChangeFuncionario}>
+
+                    <option> Selecione... </option>
+
 
                     {exames.map( ( item )=>(
 
@@ -411,89 +392,7 @@ function EditarFuncionarios( props ) {
 
                     </select>
 
-                </div>                
-
-                <h2> Endereço </h2>
-
-                <div className = { styles.formGroup } >
-
-                    <label htmlFor = "logradouro" > Logradouro </label>
-                    <input type = "text" id = "logradouro" name = "logradouro"  defaultValue = { dadosDoEndereco.logradouro }/>
-
-                </div>
-
-                <div className = { styles.formGroup } >
-
-                    <label htmlFor = "numero" > Número </label>
-                    <input type = "number" id = "numero" name = "numero"  defaultValue = { dadosDoEndereco.numero }/>
-
-                </div>
-
-                <div className = { styles.formGroup } >
-
-                    <label htmlFor = "complemento" > Complemento </label>
-                    <input type = "text" id = "complemento" name = "complemento" defaultValue = { dadosDoEndereco.complemento }/>
-
-                </div>
-
-                <div className = { styles.formGroup } >
-
-                    <label htmlFor = "cep" > CEP </label>
-                    <input type = "text" id = "cep" name = "cep" defaultValue = { dadosDoEndereco.cep} />
-
-                </div>
-
-                <div className = { styles.formGroup } >
-
-                    <label htmlFor = "bairro" > Bairro </label>
-                    <input  type = "text" id = "bairro" name = "bairro" defaultValue = { dadosDoEndereco.bairro }/>
-
-                </div>
-
-                <div className = { styles.formGroup } >
-
-                    <label htmlFor = "cidade" > Cidade </label>
-                    <input type = "text" id = "cidade" name = "cidade" defaultValue = { dadosDoEndereco.cidade }/>
-
-                </div>
-
-                <div className = { styles.formGroup } >
-
-                    <label htmlFor = "uf" > UF </label>
-                    <select id = "uf" name = "uf" value = { dadosDoEndereco.uf } onChange = { onChangeEndereco } >
-                    
-                        <option></option>
-                        <option value = "AC"> AC </option>
-                        <option value = "AL"> AL </option>
-                        <option value = "AP"> AP </option>
-                        <option value = "AM"> AM </option>
-                        <option value = "BA"> BA </option>
-                        <option value = "CE"> CE </option>
-                        <option value = "DF"> DF </option>
-                        <option value = "ES"> ES </option>
-                        <option value = "GO"> GO </option>
-                        <option value = "MA"> MA </option>
-                        <option value = "MS"> MS </option>
-                        <option value = "MT"> MT </option>
-                        <option value = "MG"> MG </option>
-                        <option value = "PA"> PA </option>
-                        <option value = "PB"> PB </option>
-                        <option value = "PE"> PE </option>
-                        <option value = "PI"> PI </option>
-                        <option value = "PR"> PR </option>
-                        <option value = "RJ"> RJ </option>
-                        <option value = "RN"> RN </option>
-                        <option value = "RO"> RO </option>
-                        <option value = "RR"> RR </option>
-                        <option value = "RS"> RS </option>
-                        <option value = "SC"> SC </option>
-                        <option value = "SE"> SE </option>
-                        <option value = "SP"> SP </option>
-                        <option value = "TO"> TO </option>
-
-                    </select>
-
-                </div>
+                </div>                    
 
                 <div className = { styles.caixaDeBotoes }>
 

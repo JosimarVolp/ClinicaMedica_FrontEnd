@@ -31,6 +31,7 @@ export default function CadastrarCargos() {
             .then( (response) => {
 
                 alert("Cargo cadastrado com sucesso!!");
+                navigate('/gerenciar_cargos');
 
             });
     };
@@ -57,7 +58,7 @@ export default function CadastrarCargos() {
                 <div className = { styles.formGroup } >
 
                     <label htmlFor = "carga_horaria" > Carga Horária </label>
-                    <input type = "number" id = "carga_horaria" name = "carga_horaria" onChange = { onChange } />
+                    <input type = "text" id = "carga_horaria" name = "carga_horaria" onChange = { onChange } />
 
                 </div>
 

@@ -1,22 +1,48 @@
-import React from "react";
+import React, {useState, useEffect, useContext} from "react";
 
 import TituloDaPagina from "../TituloDaPagina";
-//import Tabela from "../Tabela";
-import Botao from "../Botao";
+
+import axios from "axios";
+
+import { Link, useNavigate } from "react-router-dom";
 
 import styles from "./styles.module.css";
+
+import { contextMedicamentoSelecionado } from "../../App";
 
 function GerenciarMedicamentos() {
 
     const tituloDaPagina = "Medicamentos";
 
-    const dadosDoBotao = [
+    const navigate = useNavigate();
 
-        {
-            titulo: "Novo",
-            link: "/gerenciar_medicamentos/cadastrar"
-        }
-    ]
+    const [ medicamentos, setMedicamentos ] = useState([]);
+
+    const { idMedicamentoSelecionado, setIdMedicamentoSelecionado } = useContext(contextMedicamentoSelecionado);
+
+    useEffect(() => {
+
+        axios.get('https://clinicamedica-backend.herokuapp.com/api/gerenciar_medicamentos')
+        
+        .then( (res) => {
+
+            const medicamentosTemp = res.data;
+            setMedicamentos( medicamentosTemp );
+
+        });
+
+    }, []);
+
+    function retornaAAreaRestrita() {
+
+        navigate('/area_restrita');
+    }
+
+    function novoMedicamento() {
+
+        navigate('/gerenciar_medicamentos/cadastrar');
+
+    }
 
     return (
 
@@ -38,12 +64,19 @@ function GerenciarMedicamentos() {
 
                 <tbody>
 
-                    <tr>
+                    {
+                        medicamentos.map( (medicamento) => (
 
-                        <td className = { styles.coluna01 }> Atensina </td>
-                        <td className = { styles.coluna02 }><button className = { styles.botaoEditar }> Editar </button></td>
+                            <tr key = { medicamento.id }>
 
-                    </tr>
+                                <td className = { styles.coluna01 }> { medicamento.nome } </td>
+                                <td className = { styles.coluna02 } > <Link to = {`/gerenciar_medicamentos/editar/${medicamento.id}`} > <button onClick = { () => setIdMedicamentoSelecionado(medicamento.id) }  className = { styles.botaoEditar } > Editar </button></Link></td>
+
+                            </tr>
+                        ))
+                    }
+
+                    
 
                 </tbody>
 
@@ -51,16 +84,17 @@ function GerenciarMedicamentos() {
 
                     <tr>
 
-                        <td colSpan = "2"> Há X medicamentos cadastrados </td>
+                        <td colSpan = "2"> Há {medicamentos.length } medicamentos cadastrados </td>
 
                     </tr>
 
                 </tfoot>
             </table>
             
-            <div className = { styles.botao }>
+            <div className = { styles.caixaDeBotoes }>
                 
-                <Botao dadosDoBotao = { dadosDoBotao[0] } />
+                <button type = "button" onClick = { novoMedicamento } className = { styles.botaoCadastrar}> Cadastrar </button>
+                <button type = "button" onClick = { retornaAAreaRestrita } className = { styles.botaoVoltar}> Voltar </button>
 
             </div>
         </>

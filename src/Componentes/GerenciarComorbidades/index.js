@@ -1,22 +1,50 @@
-import React from "react";
+import React, {useState, useEffect, useContext} from "react";
+
+import axios from "axios";
 
 import TituloDaPagina from "../TituloDaPagina";
-//import Tabela from "../Tabela";
-import Botao from "../Botao";
+
+import { Link, useNavigate } from "react-router-dom";
+
+import { contextComorbidadeSelecionada } from "../../App";
+
+
 
 import styles from "./styles.module.css";
 
-function GerenciarComorbidades() {
+function GerenciarComorbidades( ) {
 
     const tituloDaPagina = "Comorbidades";
 
-    const dadosDoBotao = [
+    const navigate = useNavigate();
 
-        {
-            titulo: "Nova",
-            link: "/gerenciar_comorbidades/cadastrar"
-        }
-    ]
+    const [ comorbidades, setComorbidades ] = useState([]);
+
+    const { idComorbidadeSelecionada, setIdComorbidadeSelecionada } = useContext(contextComorbidadeSelecionada);
+
+    useEffect(() => {
+
+        axios.get('https://clinicamedica-backend.herokuapp.com/api/gerenciar_comorbidades')
+        
+        .then( (res) => {
+
+            const comorbidadesTemp = res.data;
+            setComorbidades( comorbidadesTemp );
+
+        });
+
+    }, []);
+
+    function retornaAAreaRestrita() {
+
+        navigate('/area_restrita');
+    }
+
+    function novaComorbidade() {
+
+        navigate('/gerenciar_comorbidades/cadastrar');
+
+    }
 
     return(
 
@@ -38,12 +66,19 @@ function GerenciarComorbidades() {
 
                 <tbody>
 
-                    <tr>
+                    {
+                        comorbidades.map( (comorbidade) => (
 
-                        <td className = { styles.coluna01 }> Diabetes </td>
-                        <td className = { styles.coluna02 }><button className = { styles.botaoEditar }> Editar </button></td>
+                            <tr key = { comorbidade.id}>
 
-                    </tr>
+                                <td className = { styles.coluna01 }> { comorbidade.nome } </td>                                
+                                <td className = { styles.coluna02 } > <Link to = {`/gerenciar_comorbidades/editar/${comorbidade.id}`} > <button onClick = { () => setIdComorbidadeSelecionada(comorbidade.id) }  className = { styles.botaoEditar } > Editar </button></Link></td>
+
+                            </tr>
+
+                        ))                      
+
+                    }                    
 
                 </tbody>
 
@@ -51,7 +86,7 @@ function GerenciarComorbidades() {
 
                     <tr>
 
-                        <td colSpan = "2"> Há X comorbidades cadastradas</td>
+                        <td colSpan = "2"> Há {comorbidades.length} comorbidades cadastradas</td>
 
                     </tr>
 
@@ -59,9 +94,10 @@ function GerenciarComorbidades() {
 
             </table>
 
-            <div className = { styles.botao }>
-
-                <Botao dadosDoBotao = { dadosDoBotao[0] } />
+            <div className = { styles.caixaDeBotoes }>
+                
+                <button type = "button" onClick = { novaComorbidade } className = { styles.botaoCadastrar}> Novo </button>
+                <button type = "button" onClick = { retornaAAreaRestrita } className = { styles.botaoVoltar}> Voltar </button>
 
             </div>
         </>

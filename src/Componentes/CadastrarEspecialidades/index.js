@@ -32,16 +32,44 @@ function CadastrarEspecialidades() {
         setDadosDaEspecialidade( { ...dadosDaEspecialidade, [name]: value } );
     };
 
-    function onSubmit(ev) {
+    function onChangeFile(ev) {
+
+        const { name, value } = ev.target;          
+
+        setDadosDaEspecialidade( { ...dadosDaEspecialidade, [name]: value } ); 
+
+        setImagem(ev.target.files[0]);
+
+        
+    };
+
+    async function onSubmit(ev) {
 
         ev.preventDefault();
 
-        axios.post( 'https://clinicamedica-backend.herokuapp.com/api/gerenciar_especialidades', dadosDaEspecialidade )
+        const formData = new FormData();
+        formData.append('imagem', imagem);
+
+        const headers = {
+
+            "headers": {
+                "Content-Type": "application/json",
+            }
+        }
+
+        await axios.post( 'https://clinicamedica-backend.herokuapp.com/api/gerenciar_especialidades', dadosDaEspecialidade )
         
             .then( (response) => {
 
-                alert("Especialidade cadastrada com sucesso!!");
+                //alert("Especialidade cadastrada com sucesso!!");
             });
+
+        await axios.post( 'https://clinicamedica-backend.herokuapp.com/api/upload_image', formData, headers )
+        .then( (response) => {
+
+            alert("Especialidade cadastrada com sucesso!!");
+            navigate('/gerenciar_especialidades');
+        });
     };
 
     function retornaAoGerenciador() {
@@ -49,13 +77,15 @@ function CadastrarEspecialidades() {
         navigate('/gerenciar_especialidades');
     }
 
+    const [ imagem, setImagem] = useState("");
+
     return (
 
         <>
 
             <TituloDaPagina tituloDaPagina = { tituloDaPagina } />
 
-            <form className = { styles.formulario } onSubmit = { onSubmit }>
+            <form className = { styles.formulario } onSubmit = { onSubmit } >
 
                 <div className = { styles.formGroup } >
 
@@ -83,7 +113,7 @@ function CadastrarEspecialidades() {
                 <div className = { styles.formGroup } >
 
                     <label htmlFor = "imagem"> Imagem </label>
-                    <input type = "text" id = "imagem" name = "imagem" onChange = { onChange } />
+                    <input type = "file" id = "imagem" name = "imagem" onChange = { onChangeFile } required/>
 
                 </div>
 

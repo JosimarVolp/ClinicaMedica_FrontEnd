@@ -80,13 +80,16 @@ function CadastrarFuncionarios() {
         status: ""
     };
 
-
     const dadosIniciaisDoFuncionario = {
 
-        endereco: 0
-    }
-
-    
+        cpf: "",
+        data_nascimento: "",
+        data_admissao: "",
+        data_demissao: "",
+        cargo: "",
+        //exame_que_realiza: "NULL"
+        
+    };    
 
     const dadosIniciaisDoMedico = {
 
@@ -94,70 +97,14 @@ function CadastrarFuncionarios() {
         crm: "",
         especialidade: "0",
         biografia: "",
-        foto: ""
-    };
-
-    const dadosIniciaisDoEndereco = {
-
-        logradouro: "",
-        numero: 0,
-        complemento: "",
-        cep: "",
-        bairro: "",
-        cidade: "",
-        uf: ""
+        imagem: ""
     };
 
     const [ dadosDeLogin, setDadosDeLogin ] = useState(dadosIniciaisDeLogin);
     const [ dadosDoFuncionario, setDadosDoFuncionario ] = useState(dadosIniciaisDoFuncionario);
-    const [ dadosDoMedico, setDadosDoMedico ] = useState(dadosIniciaisDoMedico);
-    const [ dadosDoEndereco, setDadosDoEndereco ] = useState(dadosIniciaisDoEndereco);
-
-    useEffect(() => {
-        
-
-        /*function teste(cpfMedico) {
-
-            console.log("Ver se passou aqui");
-
-            setDadosDoMedico( { ...dadosDoMedico, cpf: cpfMedico } );
-        }*/
-        
-        if( (dadosDoFuncionario.endereco !== 0)  ) {
-
-            axios.post('https://clinicamedica-backend.herokuapp.com/api/gerenciar_funcionarios', dadosDoFuncionario)
-              
-            .then( (response) => {
-    
-                console.log("Funcionário Cadastrado");
-
-                dadosDoFuncionario.endereco = 0;
-
-                //let cpfMedico = response.data.cpf;  
-                
-                //teste(cpfMedico);                
-                
-            });            
-        }
-        
-    }, [dadosDoFuncionario]);
-
-    /*useEffect(() => {
-        
-        if( dadosDoMedico.cpf !== '' ) {
-
-            axios.post('http://localhost:4000/api/gerenciar_medicos', dadosDoMedico)
-              
-            .then( (response) => {
-    
-                console.log("Médico Cadastrado");
-                
-            });
-        }
-    }, [dadosDoMedico]);*/
-
-    
-
+    const [ dadosDoMedico, setDadosDoMedico ] = useState(dadosIniciaisDoMedico);  
+    const [ imagem, setImagem] = useState("");
+  
 
     function onChangeCPF( ev ) {
 
@@ -197,27 +144,79 @@ function CadastrarFuncionarios() {
         setDadosDoMedico( { ...dadosDoMedico, [name]: value } );
     };
 
-    function onChangeEndereco( ev ) {
+    function onChangeFile(ev) {
 
-        const { name, value } = ev.target;
+        const { name, value } = ev.target;          
 
-        console.log({ name, value });
+        setDadosDoMedico( { ...dadosDoMedico, [name]: value } ); 
 
-        setDadosDoEndereco( { ...dadosDoEndereco, [name]: value } );
+        setImagem(ev.target.files[0]);
+
+        
     };
 
-    function addLogin( dados ) {
+    
+
+    /*function addLogin( dados ) {
 
         axios.post( 'https://clinicamedica-backend.herokuapp.com/api/cadastrar_login', dados )
         
-        .then((response) => {
+        .then((res) => {
 
             console.log("Login Cadastrado");
+
+            let cpf = res.data.cpf;
+            setDadosDoFuncionario( { ...dadosDoFuncionario, cpf: cpf } );
+
         });
     };
 
-    function addMedico( dados ) {
+    useEffect(() => {
 
+        if(dadosDoFuncionario.cpf !== "") {
+
+            axios.post( 'https://clinicamedica-backend.herokuapp.com/api/gerenciar_funcionarios', dadosDoFuncionario)
+        
+            .then(( res ) => {
+
+                console.log("Funcionario Cadastrado");
+
+                let cpf = res.data.cpf;
+                setDadosDoMedico( { ...dadosDoMedico, cpf: cpf } );
+            });
+        }
+    }, [dadosDoFuncionario.cpf]);
+
+    useEffect(() => {
+
+        if(dadosDoMedico.cpf !== "") {
+
+            axios.post( 'https://clinicamedica-backend.herokuapp.com/api/gerenciar_medicos', dadosDoMedico)
+        
+            .then(( res ) => {
+
+                console.log("Funcionario Cadastrado");
+                
+            });
+        }
+    }, [dadosDoMedico.cpf]);*/
+
+    /*function addFuncionario( dados ) {
+
+        setTimeout(() => {
+
+        axios.post( 'https://clinicamedica-backend.herokuapp.com/api/gerenciar_funcionarios', dados)
+    
+        .then(( response ) => {
+
+            console.log("Funcionario Cadastrado");
+        });
+
+    }, 5000);
+               
+    };*/
+
+    /*function addMedico( dados ) {
         
         setTimeout(() => {
 
@@ -230,38 +229,60 @@ function CadastrarFuncionarios() {
                     console.log("Medico Cadastrado");
                 });
             }
-        }, 5000);
-    };
+        }, 10000);
+    };*/
 
-    function addEndereco( dados ) {
+    
 
-        axios.post( 'https://clinicamedica-backend.herokuapp.com/api/gerenciar_enderecos', dados )
+    async function onSubmit( ev ) {
+
+        ev.preventDefault();
+
+        const formData = new FormData();
+        formData.append('imagem', imagem);
+
+        const headers = {
+
+            "headers": {
+                "Content-Type": "application/json",
+            }
+        }
+        //addLogin(dadosDeLogin); 
+        //addFuncionario(dadosDoFuncionario)      
+        //addMedico(dadosDoMedico);
+
+        await axios.post( 'https://clinicamedica-backend.herokuapp.com/api/cadastrar_login', dadosDeLogin )
         
-        .then(( response ) => {
+        .then((res) => {
 
-            console.log( "Endereço Cadastrado" );
-
-            let idEndereco = response.data.id;
-
-            console.log("O id do endereço é" + idEndereco );
-
-            setDadosDoFuncionario( { ...dadosDoFuncionario, endereco: idEndereco } );
-
-            console.log("O ID a ser cadastrado é:" + dadosDoFuncionario.endereco );
-
+            console.log("Login Cadastrado");            
 
         });
 
-    };
-
-    function onSubmit( ev ) {
-
-        ev.preventDefault();
-        addLogin(dadosDeLogin);
-        addEndereco(dadosDoEndereco);
-        addMedico(dadosDoMedico);
+        await axios.post( 'https://clinicamedica-backend.herokuapp.com/api/gerenciar_funcionarios', dadosDoFuncionario)
         
+            .then(( res ) => {
 
+                console.log("Funcionario Cadastrado");
+
+                
+            });
+
+        await axios.post( 'https://clinicamedica-backend.herokuapp.com/api/gerenciar_medicos', dadosDoMedico)
+        
+            .then(( res ) => {
+
+                console.log("Medico Cadastrado");
+                
+            });
+
+        await axios.post( 'https://clinicamedica-backend.herokuapp.com/api/upload_image', formData, headers )
+        
+        .then(( response ) => {
+
+            console.log("Funcionário Cadastrado");
+            navigate('/gerenciar_funcionarios');
+        });
 
 
     }
@@ -327,8 +348,7 @@ function CadastrarFuncionarios() {
                     <select id = "perfil" name = "perfil" onChange = { onChangeLogin }>                
 
                         <option></option>
-                        <option value = "admin"> Administrador </option>
-                        <option value = "cliente"> Cliente </option>
+                        <option value = "admin"> Administrador </option>                        
                         <option value = "medico"> Médico </option>
                         <option value = "examinador"> Examinador</option>
                         <option value = "funcionario"> Funcionário</option>
@@ -353,21 +373,21 @@ function CadastrarFuncionarios() {
                 <div className = { styles.formGroup } >
 
                     <label htmlFor = "data_nascimento" > Data de Nascimento </label>
-                    <input type = "text" id = "data_nascimento" name = "data_nascimento" onChange = { onChangeFuncionario } />
+                    <input type = "date" id = "data_nascimento" name = "data_nascimento" onChange = { onChangeFuncionario } />
 
                 </div>
 
                 <div className = { styles.formGroup } >
 
                     <label htmlFor = "data_admissao"> Data de Admissão </label>
-                    <input type = "text" id = "data_admissao" name = "data_admissao" onChange = { onChangeFuncionario } />
+                    <input type = "date" id = "data_admissao" name = "data_admissao" onChange = { onChangeFuncionario } />
 
                 </div>
 
                 <div className = { styles.formGroup } >
 
                     <label htmlFor = "data_demissao"> Data de Demissão </label>
-                    <input type = "text" id = "data_demissao" name = "data_demissao" onChange = { onChangeFuncionario } />
+                    <input type = "date" id = "data_demissao" name = "data_demissao" onChange = { onChangeFuncionario } />
 
                 </div>
 
@@ -417,8 +437,8 @@ function CadastrarFuncionarios() {
 
                 <div className = { styles.formGroup } >
 
-                    <label htmlFor = "foto"> Foto </label>
-                    <input type = "text" id = "foto" name = "foto" onChange = { onChangeMedico } />
+                    <label htmlFor = "imagem"> Foto </label>
+                    <input type = "file" id = "imagem" name = "imagem" onChange = { onChangeFile } required/>
 
                 </div>
 
@@ -438,89 +458,7 @@ function CadastrarFuncionarios() {
 
                     </select>
 
-                </div>                
-
-                <h2> Endereço </h2>
-
-                <div className = { styles.formGroup } >
-
-                    <label htmlFor = "logradouro" > Logradouro </label>
-                    <input type = "text" id = "logradouro" name = "logradouro" onChange = { onChangeEndereco } />
-
-                </div>
-
-                <div className = { styles.formGroup } >
-
-                    <label htmlFor = "numero" > Número </label>
-                    <input type = "number" id = "numero" name = "numero" onChange = { onChangeEndereco } />
-
-                </div>
-
-                <div className = { styles.formGroup } >
-
-                    <label htmlFor = "complemento" > Complemento </label>
-                    <input type = "text" id = "complemento" name = "complemento" onChange = { onChangeEndereco } />
-
-                </div>
-
-                <div className = { styles.formGroup } >
-
-                    <label htmlFor = "cep" > CEP </label>
-                    <input type = "text" id = "cep" name = "cep" onChange = { onChangeEndereco } />
-
-                </div>
-
-                <div className = { styles.formGroup } >
-
-                    <label htmlFor = "bairro" > Bairro </label>
-                    <input  type = "text" id = "bairro" name = "bairro" onChange = { onChangeEndereco } />
-
-                </div>
-
-                <div className = { styles.formGroup } >
-
-                    <label htmlFor = "cidade" > Cidade </label>
-                    <input type = "text" id = "cidade" name = "cidade" onChange = { onChangeEndereco } />
-
-                </div>
-
-                <div className = { styles.formGroup } >
-
-                    <label htmlFor = "uf" > UF </label>
-                    <select id = "uf" name = "uf" onChange = { onChangeEndereco }>
-                    
-                        <option></option>
-                        <option value = "AC"> AC </option>
-                        <option value = "AL"> AL </option>
-                        <option value = "AP"> AP </option>
-                        <option value = "AM"> AM </option>
-                        <option value = "BA"> BA </option>
-                        <option value = "CE"> CE </option>
-                        <option value = "DF"> DF </option>
-                        <option value = "ES"> ES </option>
-                        <option value = "GO"> GO </option>
-                        <option value = "MA"> MA </option>
-                        <option value = "MS"> MS </option>
-                        <option value = "MT"> MT </option>
-                        <option value = "MG"> MG </option>
-                        <option value = "PA"> PA </option>
-                        <option value = "PB"> PB </option>
-                        <option value = "PE"> PE </option>
-                        <option value = "PI"> PI </option>
-                        <option value = "PR"> PR </option>
-                        <option value = "RJ"> RJ </option>
-                        <option value = "RN"> RN </option>
-                        <option value = "RO"> RO </option>
-                        <option value = "RR"> RR </option>
-                        <option value = "RS"> RS </option>
-                        <option value = "SC"> SC </option>
-                        <option value = "SE"> SE </option>
-                        <option value = "SP"> SP </option>
-                        <option value = "TO"> TO </option>
-
-                    </select>
-
-                </div>
+                </div>                 
 
                 <div className = { styles.caixaDeBotoes }>
 

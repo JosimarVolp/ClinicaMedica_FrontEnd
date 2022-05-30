@@ -40,7 +40,7 @@ function GerenciarExamesAgendados() {
 
         if(usuarioConectado.perfil === "admin") {
         
-            axios.get(`https://clinicamedica-backend.herokuapp.com/api/gerenciar_exames_e_procedimentos_agendados`)
+            axios.get(`https://clinicamedica-backend.herokuapp.com/api/gerenciar_exames_e_procedimentos_agendados/status/agendado`)
             
             .then( ( res ) => {
 

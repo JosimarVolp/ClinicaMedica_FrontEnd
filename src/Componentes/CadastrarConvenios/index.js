@@ -41,6 +41,7 @@ function CadastrarConvenios() {
             .then( ( response ) => {
 
                 alert( "Convênio cadastrado com sucesso!" );
+                navigate('/gerenciar_convenios');
 
             });
     }

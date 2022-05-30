@@ -1,0 +1,15 @@
+.container {
+
+    width: 80%;
+
+    margin-left: 10%;
+}
+
+.mapa {
+
+    width: 80%;
+    height: 300px;
+    margin: 0 10%;
+    border: #000 solid 3px;
+
+}

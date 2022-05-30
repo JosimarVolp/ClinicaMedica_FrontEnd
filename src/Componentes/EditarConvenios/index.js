@@ -49,6 +49,7 @@ const CadastrarConvenios = ( props ) => {
         .then( ( res ) => {
 
             alert("Convênio atualizado com sucesso");
+            navigate('/gerenciar_convenios');
         });
 
     }

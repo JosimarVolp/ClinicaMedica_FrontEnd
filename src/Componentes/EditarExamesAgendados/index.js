@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useContext } from "react";
 
 import { useNavigate } from "react-router-dom";
 
@@ -8,10 +8,14 @@ import TituloDaPagina from "../TituloDaPagina";
 
 import styles from "./styles.module.css";
 
+import { contextUsuarioConectado } from '../../App';
+
 function EditarExamesAgendados( props ) {
 
     //Título que será mostrado na "Barra de"
-    const tituloDaPagina = "Editar Exames / Procedimentos";   
+    const tituloDaPagina = "Editar Exames / Procedimentos";  
+    
+    const { usuarioConectado } = useContext(contextUsuarioConectado);
 
     const navigate = useNavigate();
 
@@ -33,6 +37,8 @@ function EditarExamesAgendados( props ) {
     const [ funcionarios, setFuncionarios ] = useState([]);
 
     const [ clientes, setClientes ] = useState([]);
+
+    const [ imagem, setImagem] = useState("");
     
     useEffect( () => {
 
@@ -213,20 +219,48 @@ function EditarExamesAgendados( props ) {
 
     };
 
-    function onSubmit( ev ) {
+    function onChangeFile(ev) {
+
+        const { name, value } = ev.target;          
+
+        setExameAgendado( { ...exameAgendado, [name]: value } ); 
+
+        setImagem(ev.target.files[0]);
+
+        
+    };
+
+    async function onSubmit( ev ) {
 
         ev.preventDefault();
+
+        const formData = new FormData();
+        formData.append('imagem', imagem);
+
+        const headers = {
+
+            "headers": {
+                "Content-Type": "application/json",
+            }
+        }
         
 
-        axios.put('https://clinicamedica-backend.herokuapp.com/api/gerenciar_exames_e_procedimentos_agendados', exameAgendado)
-
-
-        
+        await axios.put('https://clinicamedica-backend.herokuapp.com/api/gerenciar_exames_e_procedimentos_agendados', exameAgendado)        
         .then( (response) => {
 
-            alert("Exame / Procedimento alterado com sucesso!!!");
-            navigate("/gerenciar_exames_e_procedimentos_agendados")
+            //alert("Exame / Procedimento alterado com sucesso!!!");
+            //navigate("/gerenciar_exames_e_procedimentos_agendados")
         });
+
+        if(usuarioConectado.perfil === "examinador") {
+
+            await axios.post( 'https://clinicamedica-backend.herokuapp.com/api/upload_image', formData, headers )
+            .then( (response) => {
+
+                alert("Exame / Procedimento alterado com sucesso!!!");
+                navigate("/gerenciar_exames_e_procedimentos_agendados")
+            });
+        }
     }
 
 
@@ -247,108 +281,234 @@ function EditarExamesAgendados( props ) {
             });
         
     }
+
+    if(usuarioConectado.perfil === "examinador") {
+
+        return (
+
+            <>
+    
+                <TituloDaPagina tituloDaPagina = { tituloDaPagina } />      
+    
+                <form className = { styles.formulario } onSubmit = { onSubmit } >
+    
+                    <div className = { styles.formGroup } >
+    
+                        <label htmlFor = "exame"> Exame </label>
+                        <select id = "exame" name = "exame" value = { exameAgendado.exame } onChange = { onChange } disabled required > 
+    
+                            <option> Selecione... </option>
+                            { exames.map( ( exame ) => (
+    
+                                <option key = { exame.id } value = { exame.id }> { exame.nome } </option>
+    
+                            ) )}
+    
+                        </select>
+    
+                    </div>
+    
+                    <div className = { styles.formGroup } >
+    
+                        <label htmlFor = "funcionario"> Funcionário </label>
+                        <select id = "funcionario" name = "funcionario" value = { exameAgendado.funcionario } onChange = { onChange } disabled required >
+                        
+                            <option> Selecione... </option>
+                            {funcionarios.map( (funcionario) => (
+                                
+                                <option key = { funcionario.cpf } value = { funcionario.cpf } > { funcionario.nome } </option>
+                            
+                            ))}                    
+    
+                        </select>
+    
+                    </div>
+    
+                    <div className = { styles.formGroup } >
+    
+                        <label htmlFor = "cliente"> Cliente </label>
+                        <select id = "cliente" name = "cliente" value = { exameAgendado.cliente } onChange = { onChange } disabled required >
+    
+                            {clientes.map( (cliente) => (
+                                
+                                <option key = { cliente.cpf } value = { cliente.cpf } > { cliente.nome}  </option>
+                            
+                            ))}
+    
+                                
+    
+                        </select>
+    
+                    </div>
+    
+                    <div className = { styles.formGroup } >
+    
+                        <label htmlFor = "data"> Data </label>                    
+                        <input type = "date" id = "data" name = "data" defaultValue = { exameAgendado.data } onChange = { onChange } required />
+    
+                    </div>
+    
+                    <div className = { styles.formGroup } >
+    
+                        <label htmlFor = "hora" > Hora </label>
+                        <select id = "hora" name = "hora" value = { exameAgendado.hora } onChange = { onChange } required >
+    
+                            <option> </option>
+                            { horariosDisponiveis.map( ( hora ) => (
+    
+                                <option key = { hora } value = { hora }>{ hora }</option>
+    
+                            ))}
+    
+                        </select>
+    
+                    </div>
+    
+                    <div className = { styles.formGroup } >
+    
+                        <label htmlFor = "valor" > Valor </label>
+                        <input type = "text" id = "valor" name = "valor" defaultValue = { exameAgendado.valor } disabled = {true} required />
+    
+                    </div>
+
+                    <div className = { styles.formGroup } >
+    
+                        <label htmlFor = "imagem" > Resultado </label>
+                        <input type = "file" id = "imagem" name = "imagem" onChange = { onChangeFile }/>
+    
+                    </div>
+
+                    <div className = { styles.formGroup } >
+    
+                        <label htmlFor = "status" > Status </label>
+                        <select id = "status" name = "status" value = { exameAgendado.status } onChange = { onChange } required >
+    
+                            <option> Selecione </option>
+                            <option value = "agendado"> Agendado </option>
+                            <option value = "realizado"> Realizado </option>                            
+    
+                        </select>
+    
+                    </div>
+    
+                    <div className = { styles.caixaDeBotoes }>
+    
+                        <button type = "submit" className = { styles.botaoCadastrar } > Salvar </button>
+                        <button type = "button"  onClick = { voltaAoGerenciador } className = { styles.botaoVoltar } > Voltar </button>
+                        <button type = "button"  onClick = { cancelaAgendamento } className = { styles.botaoCancelar } > Desmarcar </button>
+    
+                    </div>
+    
+                </form>
+    
+            </>
+    
+        ); 
+
+    } else {
     
 
-    return (
+        return (
 
-        <>
+            <>
 
-            <TituloDaPagina tituloDaPagina = { tituloDaPagina } />      
+                <TituloDaPagina tituloDaPagina = { tituloDaPagina } />      
 
-            <form className = { styles.formulario } onSubmit = { onSubmit } >
+                <form className = { styles.formulario } onSubmit = { onSubmit } >
 
-                <div className = { styles.formGroup } >
+                    <div className = { styles.formGroup } >
 
-                    <label htmlFor = "exame"> Exame </label>
-                    <select id = "exame" name = "exame" value = { exameAgendado.exame } onChange = { onChange } disabled required > 
+                        <label htmlFor = "exame"> Exame </label>
+                        <select id = "exame" name = "exame" value = { exameAgendado.exame } onChange = { onChange } disabled required > 
 
-                        <option> Selecione... </option>
-                        { exames.map( ( exame ) => (
+                            <option> Selecione... </option>
+                            { exames.map( ( exame ) => (
 
-                            <option key = { exame.id } value = { exame.id }> { exame.nome } </option>
+                                <option key = { exame.id } value = { exame.id }> { exame.nome } </option>
 
-                        ) )}
+                            ) )}
 
-                    </select>
+                        </select>
 
-                </div>
+                    </div>
 
-                <div className = { styles.formGroup } >
+                    <div className = { styles.formGroup } >
 
-                    <label htmlFor = "funcionario"> Funcionário </label>
-                    <select id = "funcionario" name = "funcionario" value = { exameAgendado.funcionario } onChange = { onChange } disabled required >
-                    
-                        <option> Selecione... </option>
-                        {funcionarios.map( (funcionario) => (
-                            
-                            <option key = { funcionario.cpf } value = { funcionario.cpf } > { funcionario.nome } </option>
+                        <label htmlFor = "funcionario"> Funcionário </label>
+                        <select id = "funcionario" name = "funcionario" value = { exameAgendado.funcionario } onChange = { onChange } disabled required >
                         
-                        ))}                    
-
-                    </select>
-
-                </div>
-
-                <div className = { styles.formGroup } >
-
-                    <label htmlFor = "cliente"> Cliente </label>
-                    <select id = "cliente" name = "cliente" value = { exameAgendado.cliente } onChange = { onChange } disabled required >
-
-                        {clientes.map( (cliente) => (
+                            <option> Selecione... </option>
+                            {funcionarios.map( (funcionario) => (
+                                
+                                <option key = { funcionario.cpf } value = { funcionario.cpf } > { funcionario.nome } </option>
                             
-                            <option key = { cliente.cpf } value = { cliente.cpf } > { cliente.nome}  </option>
-                        
-                        ))}
+                            ))}                    
 
+                        </select>
+
+                    </div>
+
+                    <div className = { styles.formGroup } >
+
+                        <label htmlFor = "cliente"> Cliente </label>
+                        <select id = "cliente" name = "cliente" value = { exameAgendado.cliente } onChange = { onChange } disabled required >
+
+                            {clientes.map( (cliente) => (
+                                
+                                <option key = { cliente.cpf } value = { cliente.cpf } > { cliente.nome}  </option>
                             
+                            ))}
 
-                    </select>
+                                
 
-                </div>
+                        </select>
 
-                <div className = { styles.formGroup } >
+                    </div>
 
-                    <label htmlFor = "data"> Data </label>                    
-                    <input type = "date" id = "data" name = "data" onChange = { onChange } required />
+                    <div className = { styles.formGroup } >
 
-                </div>
+                        <label htmlFor = "data"> Data </label>                    
+                        <input type = "date" id = "data" name = "data" onChange = { onChange } required />
 
-                <div className = { styles.formGroup } >
+                    </div>
 
-                    <label htmlFor = "hora" > Hora </label>
-                    <select id = "hora" name = "hora" onChange = { onChange } required >
+                    <div className = { styles.formGroup } >
 
-                        <option> </option>
-                        { horariosDisponiveis.map( ( hora ) => (
+                        <label htmlFor = "hora" > Hora </label>
+                        <select id = "hora" name = "hora" onChange = { onChange } required >
 
-                            <option key = { hora } value = { hora }>{ hora }</option>
+                            <option> </option>
+                            { horariosDisponiveis.map( ( hora ) => (
 
-                        ))}
+                                <option key = { hora } value = { hora }>{ hora }</option>
 
-                    </select>
+                            ))}
 
-                </div>
+                        </select>
 
-                <div className = { styles.formGroup } >
+                    </div>
 
-                    <label htmlFor = "valor" > Valor </label>
-                    <input type = "text" id = "valor" name = "valor" defaultValue = { exameAgendado.valor } disabled = {true} required />
+                    <div className = { styles.formGroup } >
 
-                </div>
+                        <label htmlFor = "valor" > Valor </label>
+                        <input type = "text" id = "valor" name = "valor" defaultValue = { exameAgendado.valor } disabled = {true} required />
 
-                <div className = { styles.caixaDeBotoes }>
+                    </div>
 
-                    <button type = "submit" className = { styles.botaoCadastrar } > Salvar </button>
-                    <button type = "button"  onClick = { voltaAoGerenciador } className = { styles.botaoVoltar } > Voltar </button>
-                    <button type = "button"  onClick = { cancelaAgendamento } className = { styles.botaoCancelar } > Desmarcar </button>
+                    <div className = { styles.caixaDeBotoes }>
 
-                </div>
+                        <button type = "submit" className = { styles.botaoCadastrar } > Salvar </button>
+                        <button type = "button"  onClick = { voltaAoGerenciador } className = { styles.botaoVoltar } > Voltar </button>
+                        <button type = "button"  onClick = { cancelaAgendamento } className = { styles.botaoCancelar } > Desmarcar </button>
 
-            </form>
+                    </div>
 
-        </>
+                </form>
 
-    );
+            </>
+
+        );
+    }
 
 };
 

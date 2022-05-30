@@ -4,8 +4,6 @@ import axios from "axios";
 
 import TituloPrincipal from "../TituloDaPagina";
 
-import Botao from "../Botao";
-
 import styles from "./styles.module.css";
 
 import { Link, useNavigate } from "react-router-dom";

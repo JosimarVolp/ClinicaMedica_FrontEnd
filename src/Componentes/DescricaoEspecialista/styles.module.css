@@ -1,0 +1,22 @@
+.container {
+
+    width: 80%;
+    margin:0 auto;
+}
+
+.imagem {
+
+    width: 30%;
+    height: 400px;
+    margin:0 20px 0 0;
+    float: left;
+}
+
+.botaoAgendar {
+
+    width: 20%;
+    padding: 3px 0;
+    margin: 20px 40%;     
+    background-color: #EA1111;
+    color:#fff;
+}

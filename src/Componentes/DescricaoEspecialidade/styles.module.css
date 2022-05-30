@@ -1,0 +1,53 @@
+.container {
+
+    width: 80%;
+    margin:0 auto;
+}
+
+.imagem {
+
+    width: 100%;
+    height: 300px;
+    margin:0 auto;
+}
+
+.container {
+
+    width: 80%;
+    margin: 0 auto;
+    height: auto;
+}
+
+.tabela{
+    
+    width: 100%;
+    border-collapse: collapse;
+    border-spacing: 0;
+    margin-bottom: 20px;
+}
+
+.tabela tr:nth-child(even) {background: #EEE}
+.tabela tr:nth-child(odd) {background: #FFF}
+
+.tabela td {
+ 
+    padding: 3px;    
+    
+}
+
+.link{
+
+    
+
+    text-decoration: none;
+    color: black;
+}
+
+.botaoAgendar {
+
+    width: 20%;
+    padding: 3px 0;
+    margin: 20px 40%;     
+    background-color: #EA1111;
+    color:#fff;
+}

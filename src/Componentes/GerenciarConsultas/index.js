@@ -45,7 +45,7 @@ function GerenciarConsultas() {
             
         } else if(usuarioConectado.perfil === "admin") {
 
-            axios.get(`https://clinicamedica-backend.herokuapp.com/api/gerenciar_consultas`)
+            axios.get(`https://clinicamedica-backend.herokuapp.com/api/gerenciar_consultas/status/agendada`)
                 
             .then( ( res ) => {
 

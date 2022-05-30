@@ -71,7 +71,8 @@ function AgendarConsultas() {
         paciente:"",
         data: "",
         hora: "",
-        valor: 0
+        valor: 0,
+        status: "agendada"
     }
 
     //Este estado guarda os dados preenchidos nos inputs para salvá-los no DB
