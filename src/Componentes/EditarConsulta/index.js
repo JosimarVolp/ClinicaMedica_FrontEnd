@@ -64,7 +64,7 @@ function EditarConsulta( props ) {
     
     useEffect( () => {
 
-        axios.get('http://localhost:4000/api/gerenciar_especialidades')
+        axios.get('https://clinicamedica-backend.herokuapp.com/api/gerenciar_especialidades')
         
         .then( (res) => {
 
@@ -111,7 +111,7 @@ function EditarConsulta( props ) {
 
             //setSelectMedico({...selectMedico, desabilitado: false})
 
-            axios.get(`http://localhost:4000/api/gerenciar_medicos/especialidades/${consultaAgendada.especialidade}`)
+            axios.get(`https://clinicamedica-backend.herokuapp.com/api/gerenciar_medicos/especialidades/${consultaAgendada.especialidade}`)
             
             .then( (res) => {
                 
@@ -125,7 +125,7 @@ function EditarConsulta( props ) {
 
     useEffect( () => {
 
-        axios.get('http://localhost:4000/api/gerenciar_logins')
+        axios.get('https://clinicamedica-backend.herokuapp.com/api/gerenciar_logins')
         
         .then( (res) => {
 
@@ -144,7 +144,7 @@ function EditarConsulta( props ) {
 
         //setSelectPaciente({...selectPaciente, desabilitado: false  })
 
-        axios.get(`http://localhost:4000/api/gerenciar_consultas/medico/${consultaAgendada.medico}`)
+        axios.get(`https://clinicamedica-backend.herokuapp.com/api/gerenciar_consultas/medico/${consultaAgendada.medico}`)
                 
         .then( ( res ) => {
 
@@ -252,7 +252,7 @@ function EditarConsulta( props ) {
 
     useEffect( () => {
 
-        axios.get('http://localhost:4000/api/gerenciar_medicamentos')
+        axios.get('https://clinicamedica-backend.herokuapp.com/api/gerenciar_medicamentos')
         
         .then( (res) => {
 
@@ -283,7 +283,7 @@ function EditarConsulta( props ) {
         console.log("Valor" +consultaAgendada.valor);
         console.log("Diagnóstico" +consultaAgendada.diagnostico);
 
-        axios.put('http://localhost:4000/api/gerenciar_consultas', consultaAgendada)        
+        axios.put('https://clinicamedica-backend.herokuapp.com/api/gerenciar_consultas', consultaAgendada)        
         .then( (response) => {
 
             alert("Consulta alterada com sucesso!!!");
@@ -293,7 +293,7 @@ function EditarConsulta( props ) {
 
         if(usuarioConectado.perfil === "medico") {
 
-            axios.post('http://localhost:4000/api/gerenciar_consultaMedicamentos', medicamentosReceitados)        
+            axios.post('https://clinicamedica-backend.herokuapp.com/api/gerenciar_consultaMedicamentos', medicamentosReceitados)        
             .then( (response) => {
 
                 navigate("/gerenciar_consultas_agendadas")
@@ -313,7 +313,7 @@ function EditarConsulta( props ) {
 
     function cancelaAgendamento() {
 
-        axios.delete(`http://localhost:4000/api/gerenciar_consultas/${consultaAgendada.id}`)
+        axios.delete(`https://clinicamedica-backend.herokuapp.com/api/gerenciar_consultas/${consultaAgendada.id}`)
             
             .then( ( response ) => {
 
@@ -419,7 +419,7 @@ function EditarConsulta( props ) {
                 <div className = { styles.formGroup } >
                 
                     <label htmlFor = "diagnostico"> Diagnóstico </label>
-                    <textarea id = "diagnostico" name = "diagnostico" cols = "100%" rows = "20" value = { consultaAgendada.diagnotico } onChange = { onChange } >
+                    <textarea id = "diagnostico" name = "diagnostico" cols = "100%" rows = "20" defaultValue = { consultaAgendada.diagnostico } onChange = { onChange } >
                     
                     </textarea>
 
