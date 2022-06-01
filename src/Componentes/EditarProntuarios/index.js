@@ -185,35 +185,7 @@ function EditarProntuarios( props ) {
 
     function onSubmit(ev) {
 
-        ev.preventDefault();
-        axios.put( "https://clinicamedica-backend.herokuapp.com/api/gerenciar_prontuarios", prontuario )
-        
-            .then( (response) => {
-
-                alert("Prontuario cadastrado com sucesso!!");
-
-            });
-
-        axios.put( "https://clinicamedica-backend.herokuapp.com/api/gerenciar_pacienteMedicamentos", medicamentoSalvo )
-        
-        .then( (response) => {
-
-            alert("Medicamento associado ao paciente!!");
-
-        })
-
-        setTimeout( () => {
-
-            axios.put( "https://clinicamedica-backend.herokuapp.com/api/gerenciar_pacienteComorbidades", comorbidadeSalva )
-            
-            .then( (response) => {
-
-                alert("Comorbidade associada ao paciente!!");
-
-                navigate('/gerenciar_prontuarios');
-
-            })
-        }, 3000 );
+        navigate('/gerenciar_prontuarios');
     };
 
     function retornaAoGerenciador() {
@@ -307,7 +279,7 @@ function EditarProntuarios( props ) {
 
                 <div className = { styles.caixaDeBotoes }>
 
-                    <button type = "submit" className = { styles.botaoCadastrar } > Cadastrar </button>  
+                    <button type = "submit" className = { styles.botaoCadastrar } > Salvar </button>  
                     <button type = "button" className = { styles.botaoVoltar } onClick={ retornaAoGerenciador } > Cancelar </button>                  
 
                 </div>
